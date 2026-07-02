@@ -81,6 +81,23 @@ class LocalStorageService {
   static Future<void> saveProfile(Map<String, dynamic> profile) =>
       _userBox.put('profile', profile);
 
+  // ── Emergency Contacts ────────────────────────────────────────────────────
+
+  /// Returns a list of saved emergency contacts.
+  static List<Map<String, String>> getEmergencyContacts() {
+    final raw = _settings.get('emergency_contacts');
+    if (raw != null) {
+      return List<Map<String, String>>.from(
+        (raw as List).map((e) => Map<String, String>.from(e as Map)),
+      );
+    }
+    return [];
+  }
+
+  /// Save the list of emergency contacts.
+  static Future<void> saveEmergencyContacts(List<Map<String, String>> contacts) =>
+      _settings.put('emergency_contacts', contacts);
+
   // ── Clear all data ────────────────────────────────────────────────────────
 
   static Future<void> clearAll() async {

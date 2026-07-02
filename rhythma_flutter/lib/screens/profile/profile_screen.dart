@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../components/shared.dart';
 import '../../config/theme.dart';
+import '../../services/local_storage_service.dart';
+import '../settings/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -16,6 +18,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   final int _mhsAverage = 85;
   final int _cycleDay = 12;
 
+  List<Map<String, String>> _emergencyContacts = [];
+
   late final AnimationController _controller;
   late final Animation<double> _headerFade;
   late final Animation<Offset> _headerSlide;
@@ -27,6 +31,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
+    _loadProfile();
+    _loadEmergencyContacts();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
@@ -80,6 +86,19 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     super.dispose();
   }
 
+  void _loadProfile() {
+    final profile = LocalStorageService.getProfile();
+    if (profile != null) {
+      _userName = profile['name'] as String? ?? 'Aarya';
+      _userAge = profile['age'] as int? ?? 28;
+      _cycleLength = profile['cycle_length'] as int? ?? 28;
+    }
+  }
+
+  void _loadEmergencyContacts() {
+    _emergencyContacts = LocalStorageService.getEmergencyContacts();
+  }
+
   String _getCyclePhase(int day) {
     if (day <= 5) return 'Menstrual Phase';
     if (day <= 13) return 'Follicular Phase';
@@ -92,58 +111,294 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final ageController = TextEditingController(text: _userAge.toString());
     final cycleController = TextEditingController(text: _cycleLength.toString());
 
+    String? nameError;
+    String? ageError;
+    String? cycleError;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: RhythmaColors.surface,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          padding: const EdgeInsets.all(24),
-          child: Column(
+          child: Container(
+            decoration: const BoxDecoration(
+              color: RhythmaColors.surface,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SectionHeader(title: 'Edit Profile'),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    errorText: nameError,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: ageController,
+                  decoration: InputDecoration(
+                    labelText: 'Age',
+                    errorText: ageError,
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: cycleController,
+                  decoration: InputDecoration(
+                    labelText: 'Average Cycle Length (Days)',
+                    errorText: cycleError,
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () async {
+                    setSheetState(() {
+                      nameError = null;
+                      ageError = null;
+                      cycleError = null;
+                    });
+
+                    final name = nameController.text.trim();
+                    final ageVal = int.tryParse(ageController.text);
+                    final cycleVal = int.tryParse(cycleController.text);
+
+                    bool isValid = true;
+
+                    if (name.isEmpty) {
+                      setSheetState(() => nameError = 'Name cannot be empty');
+                      isValid = false;
+                    }
+
+                    if (ageVal == null || ageVal < 10 || ageVal > 120) {
+                      setSheetState(() => ageError = 'Age must be between 10 and 120');
+                      isValid = false;
+                    }
+
+                    if (cycleVal == null || cycleVal < 15 || cycleVal > 45) {
+                      setSheetState(() => cycleError = 'Cycle length must be between 15 and 45 days');
+                      isValid = false;
+                    }
+
+                    if (isValid) {
+                      setState(() {
+                        _userName = name;
+                        _userAge = ageVal!;
+                        _cycleLength = cycleVal!;
+                      });
+                      
+                      await LocalStorageService.saveProfile({
+                        'name': name,
+                        'age': ageVal!,
+                        'cycle_length': cycleVal!,
+                      });
+
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: const Text('Save Changes'),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAddEditContactDialog(int? editIndex, StateSetter setSheetState) {
+    final contact = editIndex != null ? _emergencyContacts[editIndex] : null;
+    final nameController = TextEditingController(text: contact?['name']);
+    final phoneController = TextEditingController(text: contact?['phone']);
+    
+    String? nameError;
+    String? phoneError;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(editIndex == null ? 'Add Contact' : 'Edit Contact'),
+          content: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SectionHeader(title: 'Edit Profile'),
-              const SizedBox(height: 16),
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  errorText: nameError,
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
-                controller: ageController,
-                decoration: const InputDecoration(labelText: 'Age'),
-                keyboardType: TextInputType.number,
+                controller: phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Phone',
+                  errorText: phoneError,
+                ),
+                keyboardType: TextInputType.phone,
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: cycleController,
-                decoration: const InputDecoration(labelText: 'Average Cycle Length (Days)'),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _userName = nameController.text;
-                    _userAge = int.tryParse(ageController.text) ?? _userAge;
-                    _cycleLength = int.tryParse(cycleController.text) ?? _cycleLength;
-                  });
-                  Navigator.pop(context);
-                },
-                child: const Text('Save Changes'),
-              ),
-              const SizedBox(height: 16),
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                setDialogState(() {
+                  nameError = null;
+                  phoneError = null;
+                });
+
+                final name = nameController.text.trim();
+                final phone = phoneController.text.trim();
+
+                bool isValid = true;
+                if (name.isEmpty) {
+                  setDialogState(() => nameError = 'Name is required');
+                  isValid = false;
+                }
+                if (phone.isEmpty || phone.length < 8 || !RegExp(r'^\+?[0-9\s\-]+$').hasMatch(phone)) {
+                  setDialogState(() => phoneError = 'Enter a valid phone number (min 8 digits)');
+                  isValid = false;
+                }
+
+                if (isValid) {
+                  setSheetState(() {
+                    if (editIndex == null) {
+                      _emergencyContacts.add({'name': name, 'phone': phone});
+                    } else {
+                      _emergencyContacts[editIndex] = {'name': name, 'phone': phone};
+                    }
+                  });
+                  await LocalStorageService.saveEmergencyContacts(_emergencyContacts);
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  void _showEmergencyContactsSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) {
+          final contacts = _emergencyContacts;
+          
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: RhythmaColors.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SectionHeader(
+                    title: 'Emergency Contacts',
+                    action: 'Add New',
+                    onAction: () {
+                      _showAddEditContactDialog(null, setSheetState);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  if (contacts.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      child: Text(
+                        'No emergency contacts set up yet.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: RhythmaColors.mutedFg),
+                      ),
+                    )
+                  else
+                    Flexible(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: contacts.length,
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 1,
+                          color: RhythmaColors.border,
+                        ),
+                        itemBuilder: (context, index) {
+                          final contact = contacts[index];
+                          return ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: const TintedIcon(
+                              icon: Icons.contact_phone_rounded,
+                              color: RhythmaColors.rose,
+                              size: 36,
+                            ),
+                            title: Text(
+                              contact['name'] ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              contact['phone'] ?? '',
+                              style: TextStyle(color: RhythmaColors.mutedFg),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit_rounded, size: 20),
+                                  onPressed: () {
+                                    _showAddEditContactDialog(index, setSheetState);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete_outline_rounded,
+                                      color: RhythmaColors.coral, size: 20),
+                                  onPressed: () async {
+                                    setSheetState(() {
+                                      _emergencyContacts.removeAt(index);
+                                    });
+                                    await LocalStorageService.saveEmergencyContacts(_emergencyContacts);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -330,11 +585,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             icon: Icons.emergency_rounded,
             color: RhythmaColors.rose,
             title: 'Medical Emergency Contact',
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Emergency Contact setup coming soon')),
-              );
-            },
+            onTap: _showEmergencyContactsSheet,
           ),
           const Divider(height: 1, color: RhythmaColors.border),
           _buildActionTile(
@@ -342,9 +593,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             color: RhythmaColors.foreground,
             title: 'App Settings',
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Settings coming soon')),
-              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              ).then((_) {
+                setState(() {
+                  _loadProfile();
+                });
+              });
             },
           ),
         ],
