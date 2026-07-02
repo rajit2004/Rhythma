@@ -11,14 +11,22 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from api.routes import health, assistant, cycle, insights, sms
+# Direct imports from API modules
+from api.health import router as health_router
+from api.assistant import router as assistant_router
+from api.cycle import router as cycle_router
+from api.insights import router as insights_router
+from api.sms import router as sms_router
+
+# Auth router is now in core (not in api) to avoid duplicate registration
+from core.auth_router import router as auth_router
+
 from utils.logger import logger
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Rhythma backend starting up...")
-    # Future: initialise Firestore client, load ML models here
     yield
     logger.info("Rhythma backend shutting down.")
 
@@ -31,20 +39,27 @@ app = FastAPI(
 )
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
+# TODO: Tighten this in production (allow only specific origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # Tighten in production
+    allow_origins=[
+        "http://localhost:8000",  # So Swagger UI works
+        "http://localhost:3000",  # Your Flutter web (if you ever run it)
+        "http://127.0.0.1:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ── Routers ───────────────────────────────────────────────────────────────────
-app.include_router(health.router,    prefix="/api/v1/health",    tags=["Health Check"])
-app.include_router(assistant.router, prefix="/api/v1/assistant", tags=["AI Assistant"])
-app.include_router(cycle.router,     prefix="/api/v1/cycle",     tags=["Cycle Tracking"])
-app.include_router(insights.router,  prefix="/api/v1/insights",  tags=["Insights"])
-app.include_router(sms.router,       prefix="/api/v1/sms",       tags=["SMS"])
+# Auth is registered FIRST to ensure it's not auto-imported elsewhere
+app.include_router(auth_router,      prefix="/api/v1/auth",      tags=["Authentication"])
+app.include_router(health_router,    prefix="/api/v1/health",    tags=["Health Check"])
+app.include_router(assistant_router, prefix="/api/v1/assistant", tags=["AI Assistant"])
+app.include_router(cycle_router,     prefix="/api/v1/cycle",     tags=["Cycle Tracking"])
+app.include_router(insights_router,  prefix="/api/v1/insights",  tags=["Insights"])
+app.include_router(sms_router,       prefix="/api/v1/sms",       tags=["SMS"])
 
 
 @app.get("/")

@@ -1,22 +1,13 @@
-"""
-Insights routes.
-Returns CVI (Cycle Variability Index) and MHS (Menstrual Health Score).
-"""
+from fastapi import APIRouter, Depends, HTTPException
+from core.auth import get_current_user
 
-from fastapi import APIRouter
-router = APIRouter()
-
+router = APIRouter(tags=["Insights"])
 
 @router.get("/{user_id}/scores")
-async def get_scores(user_id: str):
-    """
-    Returns the latest CVI and MHS scores for a user.
-    TODO: Run XGBoost + Logistic Regression models on stored cycle data.
-    """
-    return {
-        "user_id": user_id,
-        "cvi": None,
-        "mhs": None,
-        "risk_level": None,   # "low", "medium", "high"
-        "message": "ML model integration coming soon",
-    }
+async def get_scores(
+    user_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    if user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return {"message": f"Scores for user {user_id}"}

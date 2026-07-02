@@ -1,42 +1,46 @@
-"""
-Cycle Tracking routes.
-Handles cycle log submission and retrieval.
-"""
-
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
+from core.auth import get_current_user
 from pydantic import BaseModel
-from typing import Optional
 from datetime import date
+from typing import Optional, List
 
-router = APIRouter()
-
-
+# ─── Pydantic Model ──────────────────────────────────────────────────────────
 class CycleLog(BaseModel):
-    user_id: str
     start_date: date
     end_date: Optional[date] = None
-    flow_intensity: Optional[str] = None   # "light", "medium", "heavy"
+    flow_intensity: Optional[str] = None
     mood: Optional[str] = None
-    symptoms: Optional[list[str]] = []
+    symptoms: Optional[List[str]] = []
     sleep_hours: Optional[float] = None
-    stress_level: Optional[int] = None     # 1–5
+    stress_level: Optional[int] = None
     notes: Optional[str] = None
 
 
-@router.post("/log")
-async def log_cycle(data: CycleLog):
-    """
-    Log a new cycle entry.
-    TODO: Persist to Firestore and trigger CVI/MHS recalculation.
-    """
-    # Placeholder — Firestore write will go here
-    return {"status": "logged", "data": data.model_dump()}
+# ─── Router ──────────────────────────────────────────────────────────────────
+router = APIRouter(tags=["Cycle Tracking"])
 
+@router.post("/log")
+async def log_cycle(
+    log: CycleLog,
+    current_user: dict = Depends(get_current_user)
+):
+    user_id = current_user["id"]
+    # TODO: Save to database
+    return {
+        "message": f"Cycle logged for user {user_id}",
+        "data": log.model_dump()
+    }
 
 @router.get("/{user_id}/history")
-async def get_cycle_history(user_id: str, limit: int = 12):
-    """
-    Retrieve cycle history for a user.
-    TODO: Fetch from Firestore.
-    """
-    return {"user_id": user_id, "cycles": [], "message": "Firestore integration coming soon"}
+async def get_cycle_history(
+    user_id: str,
+    limit: Optional[int] = 10,        # <-- Added back with default 10
+    current_user: dict = Depends(get_current_user)
+):
+    if user_id != current_user["id"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to view this user's data"
+        )
+    # TODO: Fetch from database with limit
+    return {"message": f"History for user {user_id}", "entries": []}
