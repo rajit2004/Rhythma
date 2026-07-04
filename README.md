@@ -1,13 +1,25 @@
-# Rhythma 🌸
-### *Her Rhythm. Her Health. Her Power.*
+<p align="center">
+  <img src="screenshots/logo.png" alt="Rhythma logo" width="120" />
+</p>
 
-> A multilingual, offline-capable AI-powered women's health companion designed for Indian women.
+<h1 align="center">Rhythma 🌸</h1>
+<p align="center"><em>Her Rhythm. Her Health. Her Power.</em></p>
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)](https://flutter.dev)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi)](https://fastapi.tiangolo.com)
-[![Gemini API](https://img.shields.io/badge/Gemini-API-orange?logo=google)](https://ai.google.dev)
-[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)]()
+<p align="center">
+ A multilingual, offline-capable AI-powered women's health companion built for women in India.
+</p>
+
+<p align="center">
+  <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter" alt="Flutter"></a>
+  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi" alt="FastAPI"></a>
+  <a href="https://ai.google.dev"><img src="https://img.shields.io/badge/Gemini-API-orange?logo=google" alt="Gemini API"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-purple.svg" alt="License: MIT"></a>
+  <a href="#project-status"><img src="https://img.shields.io/badge/Status-Acitve%20Development-yellow" alt="Status"></a>
+</p>
+
+---
+
+> **A note on this README:** This document is kept in sync with the actual code in this repository, not with the long-term vision for the product. If a feature isn't in the code yet, it's listed under **In Progress** or **Future Features**, not under **Implemented**. See [Project Status](#project-status) for the full breakdown.
 
 ---
 
@@ -24,16 +36,33 @@
 
 ---
 
-## ✨ What Rhythma Does
+## Solution
 
-Users can track menstrual cycles, symptoms, mood, sleep, and lifestyle habits. Using this data, Rhythma identifies long-term patterns and surfaces personalised health insights — helping women understand their health earlier, privately, and in their own language.
+Rhythma aims to be an offline-first, multilingual women health companion for women in tier-2 and tier-3 Indian cities — supporting cycle tracking, an AI health assistant, and personalized wellness scoring in regional languages.
 
-| Metric | Value |
-|--------|-------|
-| Target users | Women in tier-2 / tier-3 India |
-| Languages supported | Hindi, Marathi, Tamil + more planned |
-| Health scores | CVI™ + MHS™ (proprietary scoring) |
-| Connectivity | Offline-first, syncs when online |
+Today, the repository contains:
+- A **polished, mostly-static Flutter UI** for five core screens (Home, Cycle, AI Assistant, Insights, Profile) plus Settings, in 5 languages, with light/dark theming.
+- A **working FastAPI backend** with real authentication (JWT + bcrypt) and a Firestore-backed user store.
+- A **directly-integrated Gemini AI assistant** in the Flutter app (calls Google's API straight from the client).
+- Local **Hive** storage for profile, settings, and emergency contacts.
+- Scaffolded (not yet trained) **CVI/MHS scoring logic** on the backend.
+- A separate **Next.js marketing landing page**, unrelated to the app's functionality.
+
+Several pieces (cloud sync, on-device encryption, cycle-log persistence, SMS delivery from the app) are **not yet functional** — see [Implemented Features](#implemented-features) vs. [Features In Progress](#features-in-progress) below for the exact line.
+
+---
+
+## Screenshots
+
+*(Screenshots below reflect UI mockups for screens that are visually complete but, in some cases, not yet wired to real data — see Project Status.)*
+
+| Dashboard | Cycle Calendar | AI Assistant |
+|---|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Calendar](screenshots/calender.png) | ![AI Assistant](screenshots/AI_assistant.png) |
+
+| Health Insights | CVI Score | MHS Score | SMS Summary |
+|---|---|---|---|
+| ![Health Insights](screenshots/Health_Insights.png) | ![CVI](screenshots/CVI.png) | ![MHS](screenshots/MHS.png) | ![SMS](screenshots/SMS.png) |
 
 ---
 
@@ -54,195 +83,346 @@ Users can track menstrual cycles, symptoms, mood, sleep, and lifestyle habits. U
 
 ---
 
-## 🛠️ Technology Stack
+### Implemented Features
 
-| Technology | Role | Why |
-|------------|------|-----|
-| **Flutter** | Cross-platform mobile app (Android + iOS) | Single codebase for diverse Indian devices |
-| **Gemini API** | Multilingual AI health assistant | Native multilingual support across Indian languages without separate models |
-| **Google Firestore** | Cloud sync + offline support | Pairs with Hive for offline-first architecture |
-| **FastAPI** | Backend APIs, auth, SMS dispatch | Lightweight async Python backend |
-| **Hive** | Local offline storage | Fast, lightweight; keeps sensitive data on-device |
-| **Twilio SMS** | Weekly health summary delivery | Reaches users without reliable data access |
-| **XGBoost** | Cycle Variability Index (CVI) engine | Efficient inference on mid-range Android devices |
-| **Logistic Regression** | Menstrual Health Score (MHS) | Interpretable scoring layer |
-| **AES-256 Encryption** | Data security | All locally stored health data encrypted at rest |
+These exist in the code today and function as described:
 
-> **ML models run entirely on-device.** No sensitive health data leaves the phone unless the user explicitly enables cloud sync.
+- **Backend authentication** — registration and login with bcrypt password hashing and JWT issuance (`backend/core/auth.py`, `backend/core/auth_router.py`). Protected routes verify the token via `get_current_user`.
+- **AI Assistant (client-side)** — the Flutter app talks directly to the Gemini API (`gemini_service.dart`) with a system prompt tuned for menstrual health guidance, graceful fallback text when no API key is configured, and multi-turn chat history.
+- **Local storage (Hive)** — user profile, app settings, and emergency contacts are saved and loaded from on-device Hive boxes (`local_storage_service.dart`). This data persists across app restarts.
+- **Profile management** — full create/edit flow with input validation (name, age, cycle length), backed by Hive.
+- **Emergency contacts** — full add/edit/delete flow with phone number validation, backed by Hive.
+- **Local notifications** — permission requests, scheduled reminders, and instant test notifications via `flutter_local_notifications` (`notification_service.dart`), wired to toggles in Settings.
+- **Theming** — light/dark mode and a selectable accent color, persisted to Hive and applied app-wide via `ThemeProvider`.
+- **Localization** — full UI translation into English, Hindi, Marathi, Tamil, and Telugu (~125 keys each), switchable in-app and persisted.
+- **Settings screen** — notification toggles, language/theme navigation, permission shortcuts, and a logout confirmation flow.
+- **Backend health/CORS/router scaffolding** — a real FastAPI app with a lifespan hook, CORS middleware, and modular routers.
+- **Backend Firestore integration (users only)** — real create/read/update operations against a Firestore `users` collection.
+- **Backend tests** — 4 passing `pytest` tests covering login success/failure, protected-route rejection, and SMS rate limiting, with Gemini mocked out.
+
+### Features In Progress
+
+These have partial code, UI, or backend logic, but are **not end-to-end functional**:
+
+- **Cycle tracking** — the calendar UI exists (`cycle_screen.dart`), but it currently renders hardcoded state; nothing the user taps is saved. The Hive methods to persist cycle logs already exist but aren't yet called from this screen.
+- **Symptoms / mood / sleep / stress logging** — the backend data model (`CycleLog`) supports these fields, but no Flutter screen currently collects them.
+- **Cycle history** — a `GET /cycle/{user_id}/history` endpoint exists but returns an empty, hardcoded list; there's no database read behind it yet.
+- **Health Insights (CVI / MHS)** — the scoring math exists on the backend (`cvi_model.py`, `mhs_model.py`) with a heuristic fallback (no trained model file is committed yet), but the Insights screen in Flutter currently shows static UI, not real scores from these endpoints.
+- **AI Assistant (backend endpoint)** — a fully built `/assistant/chat` FastAPI endpoint exists (with the same system prompt design), but the Flutter app does not call it yet; it currently talks to Gemini directly instead. One of these two paths will be deprecated as the architecture consolidates.
+- **SMS summaries** — the backend has a real Twilio integration with rate limiting, and Flutter has a complete `SmsScreen` UI, but the screen isn't yet linked into app navigation and doesn't yet call the backend endpoint.
+- **In-app authentication** — the backend fully supports register/login, but the Flutter app has no login, registration, or session UI yet; it opens directly into the main app.
+- **Cloud sync (Firestore, client-side)** — `firestore_service.dart` on the Flutter side is currently a stub with the real Firestore calls commented out pending Firebase client setup.
+- **Testing (Flutter)** — a widget test suite exists, but part of it currently expects UI text that doesn't match the current Settings screen and needs to be reconciled with the code.
+
+### Future Features
+
+These are on the roadmap but have no implementation yet:
+
+- End-to-end offline-first sync with conflict resolution and a visible sync-status indicator
+- On-device encryption for locally stored health data
+- Connectivity-aware sync (detecting online/offline state)
+- Water, weight, and medication tracking
+- Data export/import and shareable health reports
+- A trained CVI/MHS model (current logic runs on a heuristic, not a trained model)
+- A web application with feature parity
+- WhatsApp-based assistant access (via Twilio/Meta Cloud API)
+- Verified healthcare-provider directory / connect feature
+- Regional, anonymized health-trend insights
+- CI/CD pipelines and an automated release process
+- Accessibility support (screen reader labels, semantic markup)
 
 ---
 
-## 📂 Repository Structure
+## Technology Stack
+
+| Layer | Technology | Status | Why |
+|---|---|---|---|
+| Mobile app | **Flutter** | Implemented (UI) | Single codebase across Android/iOS |
+| Backend | **FastAPI** | Implemented | Lightweight async Python API layer |
+| Auth | **JWT + bcrypt** | Implemented (backend only) | Stateless, standard token auth |
+| Cloud database | **Firebase / Firestore** | Implemented for user accounts only; not yet used for health data | Managed NoSQL store, pairs with Firebase Auth long-term |
+| Local storage | **Hive** | Implemented | Fast, dependency-light on-device storage for offline access |
+| AI assistant | **Google Gemini API** | Implemented (called directly from Flutter) | Strong multilingual generation for Indian languages |
+| State management | **Provider** | Implemented | Simple, sufficient reactivity for theme/locale |
+| Notifications | **flutter_local_notifications** | Implemented | Local reminder scheduling without a push backend |
+| Localization | **Flutter intl / ARB files** | Implemented | Native Flutter i18n tooling |
+| Charts | Custom `CustomPainter` | Implemented (basic) | `fl_chart` is a listed dependency but not yet used |
+| SMS | **Twilio** | Implemented on backend; not connected to the app UI yet | Reaches users without reliable data connectivity |
+| ML scoring | **XGBoost / Logistic Regression (planned), heuristic fallback (current)** | Partially implemented | Efficient, interpretable scoring approach once trained |
+| Routing | Manual `IndexedStack` / `Navigator` | Implemented | `go_router` is a listed dependency but not yet used |
+| Encryption | — | Not implemented | `encrypt` / `flutter_secure_storage` are listed dependencies but unused |
+| Connectivity detection | — | Not implemented | `connectivity_plus` is a listed dependency but unused |
+
+---
+
+## Architecture
+
+Rhythma currently consists of two independently runnable pieces that are **not yet fully connected**:
+
+```
+┌──────────────────────────────────────────────┐
+│                 Flutter App                   │
+│                                                │
+│  Home · Cycle · Assistant · Insights · Profile│
+│                                                │
+│  ┌──────────────────────────────────────┐     │
+│  │  Hive (local, on-device)              │     │
+│  │  → profile, settings, contacts        │     │
+│  │  → cycle log storage exists,          │     │
+│  │    but no screen writes to it yet     │     │
+│  └──────────────────────────────────────┘     │
+│                                                │
+│  Gemini API ◄── called directly for AI chat   │
+└──────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────┐
+│               FastAPI Backend                 │
+│                                                │
+│  /auth      → real JWT auth, Firestore users  │
+│  /assistant → real Gemini call (unused by app)│
+│  /cycle     → stub, returns empty/static data │
+│  /insights  → stub, returns static data       │
+│  /sms       → real Twilio integration         │
+│  /health    → basic health check              │
+└──────────────────────────────────────────────┘
+```
+
+The Flutter app and FastAPI backend do not currently share data — the app works entirely off local Hive storage and a direct Gemini connection, while the backend's auth, cycle, insights, and assistant endpoints are functional in isolation but are not yet called by the client.
+
+---
+
+## Folder Structure
 
 ```
 Rhythma/
+├── backend/                       FastAPI backend
+│   ├── api/
+│   │   ├── assistant.py           Gemini chat endpoint (not yet used by the app)
+│   │   ├── cycle.py                Cycle log endpoints (stubbed persistence)
+│   │   ├── health.py               Health check
+│   │   ├── insights.py             Score endpoint (stubbed)
+│   │   └── sms.py                  Twilio SMS endpoint (real, rate-limited)
+│   ├── core/
+│   │   ├── auth.py                 JWT + password hashing
+│   │   └── auth_router.py          Register/login routes
+│   ├── models/
+│   │   ├── cvi_model.py            Cycle Variability Index scoring (heuristic fallback)
+│   │   ├── mhs_model.py            Menstrual Health Score scoring
+│   │   └── user.py                 Pydantic user schemas
+│   ├── services/
+│   │   └── firestore_service.py    Firestore user CRUD
+│   ├── tests/
+│   │   └── test_auth.py            Backend test suite
+│   ├── utils/logger.py
+│   ├── main.py                     App entrypoint, router registration
+│   └── .env.example
 │
-├── rhythma_flutter/          # Flutter mobile application (Android + iOS)
+├── rhythma_flutter/                Flutter application
 │   ├── lib/
 │   │   ├── main.dart
-│   │   ├── config/
-│   │   │   └── theme.dart
-│   │   ├── components/
-│   │   │   ├── bottom_nav.dart
-│   │   │   ├── charts.dart
-│   │   │   └── shared.dart
-│   │   └── screens/
-│   │       ├── home/
-│   │       ├── cycle/
-│   │       ├── assistant/
-│   │       ├── insights/
-│   │       └── sms/
+│   │   ├── config/theme.dart
+│   │   ├── components/             bottom_nav, charts, shared widgets
+│   │   ├── providers/              theme_provider, locale_provider
+│   │   ├── services/               local_storage_service, gemini_service,
+│   │   │                           firestore_service (stub), notification_service
+│   │   ├── screens/
+│   │   │   ├── home/, cycle/, assistant/, insights/, profile/
+│   │   │   ├── settings/           settings, language, theme
+│   │   │   └── sms/                built but not yet linked into navigation
+│   │   └── l10n/                   en, hi, mr, ta, te translations
+│   ├── test/widget_test.dart
+│   ├── env.example
 │   └── pubspec.yaml
+│   *(Note: `android/` and `ios/` platform folders are not committed; run
+│   `flutter create .` before building for a device.)*
 │
-├── backend/                  # FastAPI backend (planned / in progress)
-│   ├── api/                  # Route handlers
-│   ├── models/               # ML models (CVI, MHS)
-│   ├── services/             # Gemini, Firestore, Twilio integrations
-│   └── utils/                # Helpers, encryption, validators
-│
-├── data/
-│   └── sample_datasets/      # Anonymized sample data for model training
-│
-├── docs/
-│   └── architecture.md       # System design documentation
-│
-├── design-concepts/          # UI reference videos (UI_Demo_1, UI_Demo_2)
-├── screenshots/              # App screenshots and logo
-│
-├── README.md
-├── LICENSE
+├── landing-page/                   Standalone Next.js marketing site (Vercel)
+├── docs/architecture.md            System design notes (describes target architecture)
+├── design-concepts/                UI demo videos
+├── screenshots/
+├── requirements.txt                Backend Python dependencies
 ├── CONTRIBUTING.md
-├── requirements.txt
-└── .gitignore
+├── LICENSE
+└── README.md
 ```
 
 ---
 
-## 🏗️ Current Status
-
-| Component | Status |
-|-----------|--------|
-| Flutter UI screens | ✅ Complete |
-| Design System & Theme Tokens | ✅ Complete |
-| Charts & Visual Components | ✅ Complete |
-| Navigation & User Flows | ✅ Complete |
-| Local Demo Data Integration | ✅ Complete |
-| Backend APIs (FastAPI) | 🚧 Not Started |
-| Gemini API Integration | 🚧 Not Started |
-| Firestore Cloud Sync | 🚧 Not Started |
-| Hive Local Storage Integration | 🚧 Not Started |
-| Cycle Variability Index (CVI) Engine | 🚧 Not Started |
-| Menstrual Health Score (MHS) Engine | 🚧 Not Started |
-| SMS Notifications (Twilio) | 🚧 Not Started |
-| Authentication & User Accounts | 🚧 Not Started |
-| Web Application | 🚧 Planned |
-| WhatsApp Bot Integration | 🚧 Planned |
-
-##### **Current Version:** Rhythma currently includes the complete Flutter frontend, UI screens, design system, and user experience flows. Backend services, AI capabilities, cloud synchronization, authentication, and health-scoring models are under development.
----
-
-## ⚡ Getting Started
+## Installation
 
 ### Prerequisites
 
 - Flutter SDK 3.x
 - Python 3.10+
 - Git
-- Firebase / Firestore account
-- Gemini API key ([get one here](https://ai.google.dev))
-- Twilio account (optional, for SMS)
-
-### Flutter (Frontend)
+- A Firebase project (for backend user storage)
+- A Gemini API key ([get one here](https://ai.google.dev))
+- A Twilio account (optional — only needed for SMS)
 
 ```bash
-# Clone the repo
 git clone https://github.com/ishita2740/Rhythma.git
-cd Rhythma/rhythma_flutter
+cd Rhythma
+```
 
-# Install packages
+### Running Flutter
+
+```bash
+cd rhythma_flutter
+
+# Platform folders are not committed — generate them first
+flutter create .
+
 flutter pub get
 
-# Run the app
+cp env.example .env
+# Add GEMINI_API_KEY to .env to enable real AI responses
+# (without it, the assistant falls back to a canned demo response)
+
 flutter run
 ```
 
-### Backend (FastAPI) — Coming Soon
+### Running Backend
 
 ```bash
 cd backend
 
-# Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate        # Linux / macOS
-# venv\Scripts\activate         # Windows
+source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
+pip install -r ../requirements.txt
 
-# Configure environment
 cp .env.example .env
-# Fill in: GEMINI_API_KEY, FIREBASE_PROJECT_ID, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
+# Fill in JWT_SECRET, Firebase credentials, and (optionally) GEMINI_API_KEY / Twilio credentials
 
-# Start server
 uvicorn main:app --reload
+```
+
+The API will be available at `http://127.0.0.1:8000`, with interactive docs at `http://127.0.0.1:8000/docs`.
+
+To run backend tests:
+
+```bash
+cd backend
+pytest
 ```
 
 ---
 
-## 🗺️ Roadmap
+## Configuration
 
-### Phase 1 — Core Mobile App ✅
-- Flutter UI for all screens (Home, Cycle, Assistant, Insights)
-- Design system and component library
+### Environment Variables
 
-### Phase 2 — AI + Backend Integration 🔄
-- FastAPI backend with Gemini API integration
-- Real multilingual AI assistant (Hindi, Marathi, Tamil, English)
-- Firestore cloud sync and local Hive storage
-- Twilio SMS weekly summaries
-- XGBoost + LR model serving (CVI + MHS)
+**Backend (`backend/.env`)**
 
-### Phase 3 — Web Application
-- React / Next.js web app with feature parity
-- Dashboard for longitudinal health insights
-- Provider-facing view for healthcare professionals
+| Variable | Required | Purpose |
+|---|---|---|
+| `JWT_SECRET` | Yes | Signs and verifies auth tokens. App will not start without it. |
+| `FIREBASE_SERVICE_ACCOUNT_JSON` or `FIREBASE_SERVICE_ACCOUNT_PATH` | Yes (one of the two) | Firebase Admin SDK credentials for Firestore access |
+| `GEMINI_API_KEY` | Optional | Enables the backend's `/assistant/chat` endpoint |
+| `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_PHONE_NUMBER` | Optional | Enables the `/sms/send-summary` endpoint |
 
-### Phase 4 — WhatsApp Bot
-- Gemini-powered WhatsApp assistant via Twilio / Meta API
-- Cycle tracking and health Q&A without app installation
-- Multilingual support for low-end device users
+**Flutter (`rhythma_flutter/.env`)**
 
-### Phase 5 — Scale + Impact
-- Verified healthcare professional connect
-- India regional health map (anonymized PCOD risk heatmap)
-- NGO and public health partnerships
-- Pilot studies in tier-2/3 cities
+| Variable | Required | Purpose |
+|---|---|---|
+| `GEMINI_API_KEY` | Optional | Enables real AI responses in the Assistant tab; without it, a demo fallback response is shown |
 
----
+### Firebase Setup
 
-## ⚠️ Disclaimer
+The backend currently uses Firebase **only for user accounts** (via the Admin SDK). To set it up:
 
-Rhythma AI is intended for **educational and preventive health awareness purposes only**. It is not a medical device and does not provide diagnoses, prescriptions, or medical treatment recommendations. Users should always consult qualified healthcare professionals for medical advice. Experimental health-awareness metrics currently under development and intended for educational insights only.
+1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com).
+2. Generate a service account key: **Project Settings → Service Accounts → Generate new private key**.
+3. Either paste the resulting JSON into `FIREBASE_SERVICE_ACCOUNT_JSON`, or save the file and point `FIREBASE_SERVICE_ACCOUNT_PATH` at it.
+4. Ensure Firestore is enabled in the project (Native mode).
+
+> **Note:** The Flutter app does not currently initialize Firebase or connect to Firestore on the client side — `firebase_core`, `cloud_firestore`, and `firebase_auth` are listed as dependencies for planned client-side sync but are not yet wired up. No `google-services.json` / `GoogleService-Info.plist` setup is required today.
 
 ---
 
-## 📖 Read the Story
+## Project Status
 
-[Building Rhythma: An AI health companion for the women India's apps forgot](https://medium.com/@rathiishita1005729/building-rhythma-an-ai-health-companion-for-the-women-indias-forgot-e249ac1cdc9a) — Medium
+| Area | Status |
+|---|---|
+| Flutter UI (screens, theming, localization) | ✅ Largely complete |
+| Local storage (profile, settings, contacts) | ✅ Complete |
+| Local notifications | ✅ Complete |
+| Backend authentication (JWT/bcrypt) | ✅ Complete |
+| Backend Firestore (user accounts) | ✅ Complete |
+| AI Assistant (client → Gemini directly) | ✅ Functional |
+| AI Assistant (backend endpoint) | ⚠️ Built, unused |
+| Cycle tracking (persistence) | ❌ UI only, not wired |
+| Cycle/insights backend endpoints | ⚠️ Stubbed, no persistence |
+| CVI / MHS scoring | ⚠️ Logic exists, no trained model, not called from the app |
+| SMS (Twilio) | ⚠️ Backend done; app UI built but unlinked |
+| Cloud sync (Flutter ↔ Firestore) | ❌ Stubbed only |
+| Encryption at rest | ❌ Not implemented |
+| Connectivity detection | ❌ Not implemented |
+| In-app authentication | ❌ Not implemented |
+| Testing | ⚠️ Basic backend suite passing; Flutter suite needs reconciliation with current UI |
+| CI/CD | ❌ Not set up |
+| Deployment | ⚠️ Landing page only (Vercel) |
+
+**In short:** the Flutter UI and the FastAPI backend are each independently further along than the app is as an integrated whole. The immediate priority is wiring the two together and making cycle tracking actually persist data.
 
 ---
 
-## 🤝 Contributing
+## Roadmap
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a pull request.
+### Phase 1 — Make it functional end-to-end
+- Generate missing Flutter platform folders (`android/`, `ios/`)
+- Wire the Cycle screen to Hive persistence
+- Reconcile the Flutter test suite with the current Settings UI
+- Link the built `SmsScreen` into app navigation
+
+### Phase 2 — Connect frontend and backend
+- Build in-app login/registration against the existing backend auth
+- Persist cycle logs through the backend `/cycle` endpoints
+- Decide on a single Gemini integration path (client-direct vs. backend-proxied) and remove the other
+- Connect the Insights screen to real CVI/MHS scores
+
+### Phase 3 — Offline-first & privacy
+- Implement Hive encryption at rest
+- Add connectivity detection and complete the stubbed Firestore sync logic
+- Initialize Firebase on the client and add a sync-status indicator
+
+### Phase 4 — Real ML scoring
+- Collect/curate training data and ship trained CVI/MHS model artifacts
+- Replace the current heuristic fallback with model-backed predictions
+
+### Phase 5 — Platform expansion
+- Web application with feature parity
+- WhatsApp-based assistant access
+- CI/CD, automated releases, and healthcare-provider partnerships
 
 ---
 
-## 📄 License
+## Contributing
+
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Since large parts of the app are still being wired together (see [Project Status](#project-status)), issues that clarify or fix the frontend/backend integration gaps above are especially useful right now.
+
+---
+
+## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-*Built with 💜 by [Ishita Rathi](https://github.com/ishita2740) for the women India's apps forgot.*
-#### *AI For Every Phase of Her Health.*
+## Acknowledgements
+
+- Built by [Ishita Rathi](https://github.com/ishita2740)
+- AI assistance powered by [Google Gemini](https://ai.google.dev)
+- Backend framework by [FastAPI](https://fastapi.tiangolo.com)
+- Mobile framework by [Flutter](https://flutter.dev)
+- Read the origin story: [*Building Rhythma: An AI health companion for the women India's apps forgot*](https://medium.com/@rathiishita1005729/building-rhythma-an-ai-health-companion-for-the-women-indias-forgot-e249ac1cdc9a)
+
+---
+
+## Disclaimer
+
+Rhythma is intended for **educational and general wellness purposes only**. It is not a certified medical device and does not provide medical diagnoses, prescriptions, or treatment recommendations. The Cycle Variability Index (CVI) and Menstrual Health Score (MHS) are experimental, non-clinical metrics currently under development. Always consult a qualified healthcare professional for medical advice.
+
+---
+
+<p align="center"><em>Built with 💜 for the women India's apps forgot.</em></p>
