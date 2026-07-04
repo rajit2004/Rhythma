@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { Smartphone, Bot, Heart, BarChart3, Lock, WifiOff, Globe, MessageCircle, ShieldCheck } from 'lucide-react';
 
 export default function Page() {
   const [email, setEmail] = useState('');
@@ -22,9 +23,14 @@ export default function Page() {
       <nav className="sticky top-0 z-50 backdrop-blur-sm bg-[#F8F5F2]/95 border-b border-[#E8DDD5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#2D5B6E] via-[#8B5B9E] to-[#D4A547] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">R</span>
+            <div className="flex items-center gap-0">
+              <div className="w-16 h-16 relative -mr-5">
+                <Image
+                  src="/logo1.png"
+                  alt="Rhythma logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="font-bold text-xl text-[#2D5B6E]">Rhythma</span>
             </div>
@@ -50,10 +56,10 @@ export default function Page() {
               Rhythma is an AI-powered women's health companion designed specifically for India. Track your menstrual cycle, get personalized insights, and access health guidance in your own language—all with complete privacy.
             </p>
             <div className="flex gap-4 pt-4">
-              <button className="bg-[#E94B7B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#D63A6A] transition">
+              <button className="bg-[#E94B7B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#D63A6A] hover:scale-105 hover:shadow-lg transition-all duration-200 cursor-pointer">
                 Get Started
               </button>
-              <button className="border-2 border-[#E94B7B] text-[#E94B7B] px-8 py-3 rounded-full font-semibold hover:bg-[#FFE8F0] transition">
+              <button className="border-2 border-[#E94B7B] text-[#E94B7B] px-8 py-3 rounded-full font-semibold hover:bg-[#FFE8F0] hover:scale-105 hover:shadow-md transition-all duration-200 cursor-pointer">
                 Learn More
               </button>
             </div>
@@ -64,7 +70,7 @@ export default function Page() {
               <a href="https://x.com/rhythmaAI" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-[#E94B7B] transition text-sm font-medium">
                 Twitter
               </a>
-              <a href="https://l1nk.dev/elwevm5" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-[#E94B7B] transition text-sm font-medium">
+              <a href="https://www.instagram.com/rhythma.ai/" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-[#E94B7B] transition text-sm font-medium">
                 Instagram
               </a>
               <a href="mailto:rhythma.official@gmail.com" className="text-[#666] hover:text-[#E94B7B] transition text-sm font-medium">
@@ -91,40 +97,40 @@ export default function Page() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {[
+         {[
             {
-              icon: '📱',
+              icon: Smartphone,
               title: 'Smart Cycle Tracking',
               desc: 'Log periods, symptoms, and lifestyle factors. Get predictive insights about your cycle patterns.'
             },
             {
-              icon: '🤖',
+              icon: Bot,
               title: 'AI Health Assistant',
               desc: 'Ask questions in Hindi, Marathi, Tamil, and more. Get personalized, educational health guidance.'
             },
             {
-              icon: '❤️',
+              icon: Heart,
               title: 'Health Score',
               desc: 'Comprehensive wellness score combining cycle, sleep, stress, and lifestyle data.'
             },
             {
-              icon: '📊',
+              icon: BarChart3,
               title: 'Variability Index',
               desc: 'Track cycle irregularities over 6-12 months and spot potential concerns early.'
             },
             {
-              icon: '🔒',
+              icon: Lock,
               title: 'Privacy First',
               desc: 'AES-256 encryption. Your data stays on your device. You control everything.'
             },
             {
-              icon: '📵',
+              icon: WifiOff,
               title: 'Works Offline',
               desc: 'Full functionality without internet. Sync seamlessly when connected.'
             }
           ].map((feature, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-[#E8DDD5] hover:shadow-lg transition duration-300">
-              <div className="text-4xl mb-4">{feature.icon}</div>
+            <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-[#E8DDD5] hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] hover:border-[#E94B7B]/30 transition-all duration-300">
+              <feature.icon className="w-9 h-9 mb-4 text-[#E94B7B]" strokeWidth={1.75} />
               <h3 className="text-xl font-bold text-[#2D5B6E] mb-3">{feature.title}</h3>
               <p className="text-[#666] leading-relaxed">{feature.desc}</p>
             </div>
@@ -169,36 +175,36 @@ export default function Page() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <h2 className="text-4xl font-bold text-center text-[#2D5B6E] mb-16">See It In Action</h2>
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1_e__Q-NizgTu1-ej-hVOecg-2u16BjtOAgH8Wlb1tQLIgl5kDGoEsw.webp"
               alt="Health Insights showing cycle patterns and wellness recommendations"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1_hPkeIoLtVGJRQGRZqCmrmw-trZv3cYvUdnYXpcBB4YYs7SlDcBPCR.webp"
               alt="Cycle Calendar with fertility window and phase tracking visualization"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1_F3b3nYwlPTEYppjpDtV-0w-JvgAyGJczG3bgl1mBOmkv6zumGwH56.webp"
               alt="Menstrual Health Score dashboard with comprehensive component breakdown"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-[#E8DDD5] h-80 relative group hover:shadow-xl hover:border-[#E94B7B]/30 transition-all duration-300">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-06-08%20150542-59Yr8TlHYgwXRXrHYVDbjV2PBXyeG1.png"
               alt="Cycle Variability Index showing 6-month pattern analysis"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
         </div>
@@ -218,16 +224,16 @@ export default function Page() {
               </p>
               <div className="space-y-3">
                 <p className="flex items-center gap-2">
-                  <span className="text-[#D4A547]">🌍</span> Available in Hindi, Marathi, Tamil, and more
+                  <Globe className="w-5 h-5 text-[#D4A547]" strokeWidth={2} /> Available in Hindi, Marathi, Tamil, and more
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-[#D4A547]">📵</span> Works fully offline with seamless sync
+                  <WifiOff className="w-5 h-5 text-[#D4A547]" strokeWidth={2} /> Works fully offline with seamless sync
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-[#D4A547]">💬</span> SMS support for low-data environments
+                  <MessageCircle className="w-5 h-5 text-[#D4A547]" strokeWidth={2} /> SMS support for low-data environments
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-[#D4A547]">🔐</span> Privacy and security by default
+                  <ShieldCheck className="w-5 h-5 text-[#D4A547]" strokeWidth={2} /> Privacy and security by default
                 </p>
               </div>
             </div>
@@ -261,7 +267,7 @@ export default function Page() {
             />
             <button
               type="submit"
-              className="bg-white text-[#E94B7B] px-8 py-3 rounded-full font-bold hover:bg-[#F0F0F0] transition whitespace-nowrap"
+              className="bg-white text-[#E94B7B] px-8 py-3 rounded-full font-bold hover:bg-[#F0F0F0] hover:scale-105 hover:shadow-lg transition-all duration-200 cursor-pointer whitespace-nowrap"
             >
               Subscribe
             </button>
@@ -293,7 +299,7 @@ export default function Page() {
               <ul className="space-y-2 text-[#B0D4E3]">
                 <li><a href="https://x.com/rhythmaAI" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Twitter</a></li>
                 <li><a href="https://www.linkedin.com/company/130984014" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">LinkedIn</a></li>
-                <li><a href="https://l1nk.dev/elwevm5" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Instagram</a></li>
+                <li><a href="https://www.instagram.com/rhythma.ai/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Instagram</a></li>
               </ul>
             </div>
             <div>
