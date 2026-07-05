@@ -30,6 +30,7 @@
 - Popular apps (Flo, Clue) assume 28-day cycles, English fluency, and stable internet
 - Limited access to gynecologists in smaller cities
 - Deep social stigma that prevents open conversations about menstrual health
+- No dedicated, age-appropriate guidance for girls experiencing their first period
 - No AI-powered early detection tool built specifically for Indian languages and contexts
 
 **Rhythma was built from the ground up for Indian women — not adapted from a solution built for another market.**
@@ -48,13 +49,28 @@ Today, the repository contains:
 - Scaffolded (not yet trained) **CVI/MHS scoring logic** on the backend.
 - A separate **Next.js marketing landing page**, unrelated to the app's functionality.
 
-Several pieces (cloud sync, on-device encryption, cycle-log persistence, SMS delivery from the app) are **not yet functional** — see [Implemented Features](#implemented-features) vs. [Features In Progress](#features-in-progress) below for the exact line.
+Several pieces (cloud sync, on-device encryption, cycle-log persistence, SMS delivery from the app, WhatsApp access, first-period onboarding, Ayurvedic content) are **not yet functional** — see [Implemented Features](#implemented-features) vs. [Features In Progress](#features-in-progress) vs. [Future Features](#future-features) below for the exact line.
+
+---
+
+## Who Rhythma Is For
+
+Rhythma is designed to grow into support for multiple groups of Indian women, each with different needs. Not all of these are served by the app yet — this is the target scope, not a claim about current functionality.
+
+| Group | Age / context | What they need |
+| --- | --- | --- |
+| **Teen girls (first period journey)** | 12–17 | Simple, non-clinical first-period guidance and menstrual education — **planned, not yet built** (see [First Period Guidance](#future-features)) |
+| **College students & working women** | 18–35 | Irregular-cycle tracking, PCOD/PCOS awareness, hormonal health support — **primary users of the current app** |
+| **Women with irregular cycles** | 18–35+ | Long-term pattern detection (CVI), not single-cycle guesswork | 
+| **Community / self-help groups** | Extended ecosystem (NGOs, rural users, shared devices) | Offline access, SMS support, and eventually WhatsApp-based access without needing to install an app — **partially planned** |
+
+Contributors working on onboarding flows, content, or accessibility should keep these different personas in mind, especially the gap between the current adult-focused experience and the still-unbuilt teen-focused one.
 
 ---
 
 ## Screenshots
 
-*(Screenshots below reflect UI mockups for screens that are visually complete but, in some cases, not yet wired to real data — see Project Status.)*
+*(Screenshots below reflect UI mockups for screens that are visually complete but, in some cases, not yet wired to real data — see [Project Status](#project-status).)*
 
 | Dashboard | Cycle Calendar | AI Assistant |
 |---|---|---|
@@ -68,18 +84,20 @@ Several pieces (cloud sync, on-device encryption, cycle-log persistence, SMS del
 
 ## 🚀 Key Features
 
-|                    Feature                        | Description |
-|---------|-------------|
-| 🌸 **Smart Cycle Tracking** | Handles irregular cycles. No fixed 28-day assumption. Tracks flow, mood, and daily symptoms. |
-| 🤖 **Gemini-Powered AI Assistant** | Multilingual health education and wellness guidance in Hindi, Marathi, Tamil, English, and more. |
-| 📊 **Cycle Variability Index™ (CVI)** | Proprietary 0–100 score quantifying hormonal instability over rolling 6–12 months. |
-| ❤️ **Menstrual Health Score™ (MHS)** | Holistic composite score: CVI + lifestyle + sleep + stress + symptoms. |
-| 🏥 **Hormonal Risk Indicator** | 3-tier alert system (Low / Medium / High) based on cycle gaps and symptom clusters. |
-| 📱 **Offline-First Architecture** | Hive local storage → Firestore cloud sync when connectivity is available. |
-| 🔒 **Privacy-First Design** | AES-256 on-device encryption. No data leaves the phone without explicit user consent. |
-| 🌍 **Indian Regional Languages** | Designed for linguistic diversity across India. |
-| 📩 **SMS Health Summaries** | Weekly summaries via Twilio SMS for users in low-data areas. |
-| 🌿 **Ayurvedic Correlation Layer** | Educational wellness insights inspired by Ayurvedic principles. |
+| Feature | Description | Status |
+| --- | --- | --- |
+| 🌸 **Smart Cycle Tracking** | Handles irregular cycles. No fixed 28-day assumption. Tracks flow, mood, and daily symptoms. | ⚠️ UI only — see [status](#features-in-progress) |
+| 🤖 **Gemini-Powered AI Assistant** | Multilingual health education and wellness guidance in Hindi, Marathi, Tamil, English, and more. | ✅ Implemented (client-side) |
+| 📊 **Cycle Variability Index™ (CVI)** | Proprietary 0–100 score quantifying hormonal instability over rolling 6–12 months. | ⚠️ Logic exists, not trained, not wired to UI |
+| ❤️ **Menstrual Health Score™ (MHS)** | Holistic composite score: CVI + lifestyle + sleep + stress + symptoms. | ⚠️ Logic exists, not trained, not wired to UI |
+| 🏥 **Hormonal Risk Indicator** | 3-tier alert system (Low / Medium / High) based on cycle gaps and symptom clusters. (Awareness tool, not a diagnosis.) | ⚠️ Backend logic only |
+| 📱 **Offline-First Architecture** | Hive local storage → Firestore cloud sync when connectivity is available. | ⚠️ Local storage done; sync stubbed |
+| 🔒 **Privacy-First Design** | On-device encryption. No data leaves the phone without explicit user consent. | ❌ Not implemented |
+| 🌍 **Indian Regional Languages** | Full UI localization across Indian languages. | ✅ Implemented (English, Hindi, Marathi, Tamil, Telugu) |
+| 📩 **SMS Health Summaries** | Weekly summaries via Twilio SMS for users in low-data areas. | ⚠️ Backend done; not linked in app |
+| 🩸 **First Period Guidance** | A dedicated, age-appropriate onboarding and education flow for first-time users (ages 12–17) — separate tone, content, and simplicity level from the adult cycle-tracking experience. | ❌ Not implemented — see [Future Features](#future-features) |
+| 🌿 **Ayurvedic Correlation Layer** | Educational wellness insights that connect lifestyle and cycle patterns with traditional Ayurvedic wellness concepts, for cultural relevance (educational only, not medical advice). | ❌ Not implemented — see [Future Features](#future-features) |
+| 💬 **WhatsApp Bot Integration** | Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) for cycle tracking and health Q&A without requiring an app install — aimed at community/self-help-group users on shared or low-end devices. | ❌ Not implemented — see [Future Features](#future-features) |
 
 ---
 
@@ -116,8 +134,11 @@ These have partial code, UI, or backend logic, but are **not end-to-end function
 
 ### Future Features
 
-These are on the roadmap but have no implementation yet:
+These are on the roadmap but have **no implementation yet** — no code, no content, no UI. Contributors interested in any of these should open an issue first (see [CONTRIBUTING.md](./CONTRIBUTING.md#issue-workflow)) to discuss scope before building, since these are also the areas most likely to need product/content decisions, not just code.
 
+- **First Period Guidance** — a separate onboarding path and education content for girls aged 12–17 experiencing their first period. Needs its own tone, simplified UI, and content review (likely with input from a health educator) before implementation. Nothing exists in the codebase yet — no screen, no content, no data model changes.
+- **Ayurvedic Correlation Layer** — educational content connecting lifestyle and cycle patterns to traditional Ayurvedic wellness concepts. Requires sourcing and reviewing culturally accurate, non-prescriptive content, plus a lightweight rules layer to surface it contextually. No content or code exists yet.
+- **WhatsApp Bot Integration** — a Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) offering cycle tracking and health Q&A without an app install, aimed at community/self-help-group users and shared/low-end devices. Depends on the backend `/assistant/chat` endpoint being production-ready first (see [Features In Progress](#features-in-progress)).
 - End-to-end offline-first sync with conflict resolution and a visible sync-status indicator
 - On-device encryption for locally stored health data
 - Connectivity-aware sync (detecting online/offline state)
@@ -125,7 +146,6 @@ These are on the roadmap but have no implementation yet:
 - Data export/import and shareable health reports
 - A trained CVI/MHS model (current logic runs on a heuristic, not a trained model)
 - A web application with feature parity
-- WhatsApp-based assistant access (via Twilio/Meta Cloud API)
 - Verified healthcare-provider directory / connect feature
 - Regional, anonymized health-trend insights
 - CI/CD pipelines and an automated release process
@@ -136,7 +156,7 @@ These are on the roadmap but have no implementation yet:
 ## Technology Stack
 
 | Layer | Technology | Status | Why |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Mobile app | **Flutter** | Implemented (UI) | Single codebase across Android/iOS |
 | Backend | **FastAPI** | Implemented | Lightweight async Python API layer |
 | Auth | **JWT + bcrypt** | Implemented (backend only) | Stateless, standard token auth |
@@ -148,6 +168,7 @@ These are on the roadmap but have no implementation yet:
 | Localization | **Flutter intl / ARB files** | Implemented | Native Flutter i18n tooling |
 | Charts | Custom `CustomPainter` | Implemented (basic) | `fl_chart` is a listed dependency but not yet used |
 | SMS | **Twilio** | Implemented on backend; not connected to the app UI yet | Reaches users without reliable data connectivity |
+| WhatsApp messaging | **Twilio / Meta Cloud API (planned)** | Not implemented | Needed for the planned WhatsApp bot |
 | ML scoring | **XGBoost / Logistic Regression (planned), heuristic fallback (current)** | Partially implemented | Efficient, interpretable scoring approach once trained |
 | Routing | Manual `IndexedStack` / `Navigator` | Implemented | `go_router` is a listed dependency but not yet used |
 | Encryption | — | Not implemented | `encrypt` / `flutter_secure_storage` are listed dependencies but unused |
@@ -188,6 +209,8 @@ Rhythma currently consists of two independently runnable pieces that are **not y
 ```
 
 The Flutter app and FastAPI backend do not currently share data — the app works entirely off local Hive storage and a direct Gemini connection, while the backend's auth, cycle, insights, and assistant endpoints are functional in isolation but are not yet called by the client.
+
+There is no WhatsApp, first-period, or Ayurvedic-content layer in this architecture yet — they would each attach to the backend (`/assistant` for WhatsApp; new endpoints/content sources for the other two).
 
 ---
 
@@ -244,9 +267,8 @@ Rhythma/
 ├── CONTRIBUTING.md
 ├── LICENSE
 └── README.md
-```
 
----
+```
 
 ## Installation
 
@@ -315,7 +337,7 @@ pytest
 **Backend (`backend/.env`)**
 
 | Variable | Required | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `JWT_SECRET` | Yes | Signs and verifies auth tokens. App will not start without it. |
 | `FIREBASE_SERVICE_ACCOUNT_JSON` or `FIREBASE_SERVICE_ACCOUNT_PATH` | Yes (one of the two) | Firebase Admin SDK credentials for Firestore access |
 | `GEMINI_API_KEY` | Optional | Enables the backend's `/assistant/chat` endpoint |
@@ -324,7 +346,7 @@ pytest
 **Flutter (`rhythma_flutter/.env`)**
 
 | Variable | Required | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | `GEMINI_API_KEY` | Optional | Enables real AI responses in the Assistant tab; without it, a demo fallback response is shown |
 
 ### Firebase Setup
@@ -343,7 +365,7 @@ The backend currently uses Firebase **only for user accounts** (via the Admin SD
 ## Project Status
 
 | Area | Status |
-|---|---|
+| --- | --- |
 | Flutter UI (screens, theming, localization) | ✅ Largely complete |
 | Local storage (profile, settings, contacts) | ✅ Complete |
 | Local notifications | ✅ Complete |
@@ -359,53 +381,67 @@ The backend currently uses Firebase **only for user accounts** (via the Admin SD
 | Encryption at rest | ❌ Not implemented |
 | Connectivity detection | ❌ Not implemented |
 | In-app authentication | ❌ Not implemented |
+| First Period Guidance | ❌ Not implemented — no design, content, or code yet |
+| Ayurvedic Correlation Layer | ❌ Not implemented — no content or code yet |
+| WhatsApp Bot Integration | ❌ Not implemented — depends on backend assistant endpoint going live first |
 | Testing | ⚠️ Basic backend suite passing; Flutter suite needs reconciliation with current UI |
 | CI/CD | ❌ Not set up |
 | Deployment | ⚠️ Landing page only (Vercel) |
 
-**In short:** the Flutter UI and the FastAPI backend are each independently further along than the app is as an integrated whole. The immediate priority is wiring the two together and making cycle tracking actually persist data.
+**In short:** the Flutter UI and the FastAPI backend are each independently further along than the app is as an integrated whole. The immediate priority is wiring the two together and making cycle tracking actually persist data. First Period Guidance, the Ayurvedic layer, and the WhatsApp bot are all clean-slate features with no existing code — good candidates for contributors who want to own something end-to-end, but each needs a scoping discussion first (see [CONTRIBUTING.md](./CONTRIBUTING.md)).
 
 ---
 
 ## Roadmap
 
 ### Phase 1 — Make it functional end-to-end
+
 - Generate missing Flutter platform folders (`android/`, `ios/`)
 - Wire the Cycle screen to Hive persistence
 - Reconcile the Flutter test suite with the current Settings UI
 - Link the built `SmsScreen` into app navigation
 
 ### Phase 2 — Connect frontend and backend
+
 - Build in-app login/registration against the existing backend auth
 - Persist cycle logs through the backend `/cycle` endpoints
 - Decide on a single Gemini integration path (client-direct vs. backend-proxied) and remove the other
 - Connect the Insights screen to real CVI/MHS scores
 
 ### Phase 3 — Offline-first & privacy
+
 - Implement Hive encryption at rest
 - Add connectivity detection and complete the stubbed Firestore sync logic
 - Initialize Firebase on the client and add a sync-status indicator
 
 ### Phase 4 — Real ML scoring
+
 - Collect/curate training data and ship trained CVI/MHS model artifacts
 - Replace the current heuristic fallback with model-backed predictions
 
-### Phase 5 — Platform expansion
+### Phase 5 — Expanded health content
+
+- **First Period Guidance**: design and build a dedicated onboarding/education flow for ages 12–17
+- **Ayurvedic Correlation Layer**: source and review educational content, then build the rules layer to surface it contextually
+- Both require content/product decisions before implementation — see [Future Features](#future-features)
+
+### Phase 6 — Platform expansion
+
 - Web application with feature parity
-- WhatsApp-based assistant access
+- **WhatsApp-based assistant access**, built on top of the existing (but currently unused) `/assistant/chat` backend endpoint
 - CI/CD, automated releases, and healthcare-provider partnerships
 
 ---
 
 ## Contributing
 
-Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Since large parts of the app are still being wired together (see [Project Status](#project-status)), issues that clarify or fix the frontend/backend integration gaps above are especially useful right now.
+Contributions are welcome. Please read [CONTRIBUTING.md](https://github.com/ishita2740/Rhythma/blob/main/CONTRIBUTING.md) before opening a pull request. Since large parts of the app are still being wired together (see [Project Status](#project-status)), issues that clarify or fix the frontend/backend integration gaps above are especially useful right now. First Period Guidance, the Ayurvedic Correlation Layer, and WhatsApp Bot Integration are open, clean-slate feature areas — see [CONTRIBUTING.md](./CONTRIBUTING.md#feature-areas-open-for-contribution) for how to propose an approach.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License. See [LICENSE](https://github.com/ishita2740/Rhythma/blob/main/LICENSE) for details.
 
 ---
 
@@ -421,7 +457,7 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ## Disclaimer
 
-Rhythma is intended for **educational and general wellness purposes only**. It is not a certified medical device and does not provide medical diagnoses, prescriptions, or treatment recommendations. The Cycle Variability Index (CVI) and Menstrual Health Score (MHS) are experimental, non-clinical metrics currently under development. Always consult a qualified healthcare professional for medical advice.
+Rhythma is intended for **educational and general wellness purposes only**. It is not a certified medical device and does not provide medical diagnoses, prescriptions, or treatment recommendations. The Cycle Variability Index (CVI) and Menstrual Health Score (MHS) are experimental, non-clinical metrics currently under development. Any future Ayurvedic content will be educational and non-prescriptive, not a substitute for medical advice. Always consult a qualified healthcare professional for medical advice.
 
 ---
 
