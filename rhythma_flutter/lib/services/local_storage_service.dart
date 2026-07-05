@@ -35,12 +35,14 @@ class LocalStorageService {
 
   /// Save a cycle log entry. Key = ISO date string of start_date.
   static Future<void> saveCycleLog(Map<String, dynamic> log) async {
+    if (isTesting) return;
     final key = log['start_date'] as String;
     await _cycleBox.put(key, log);
   }
 
   /// Returns all cycle logs sorted by date (most recent first).
   static List<Map<String, dynamic>> getCycleLogs() {
+    if (isTesting) return [];
     return _cycleBox.values
         .map((e) => Map<String, dynamic>.from(e))
         .toList()
@@ -50,6 +52,7 @@ class LocalStorageService {
 
   /// Returns the last [n] cycle logs.
   static List<Map<String, dynamic>> getRecentCycleLogs({int n = 6}) {
+    if (isTesting) return [];
     return getCycleLogs().take(n).toList();
   }
 
@@ -57,35 +60,55 @@ class LocalStorageService {
 
   static Box<dynamic> get _settings => Hive.box<dynamic>(_Keys.settingsBox);
 
-  static String get preferredLanguage =>
-      _settings.get('language', defaultValue: 'en') as String;
+  static String get preferredLanguage {
+    if (isTesting) return 'en';
+    return _settings.get('language', defaultValue: 'en') as String;
+  }
 
-  static Future<void> setPreferredLanguage(String code) =>
-      _settings.put('language', code);
+  static Future<void> setPreferredLanguage(String code) async {
+    if (isTesting) return;
+    await _settings.put('language', code);
+  }
 
-  static bool get cloudSyncEnabled =>
-      _settings.get('cloud_sync', defaultValue: false) as bool;
+  static bool get cloudSyncEnabled {
+    if (isTesting) return false;
+    return _settings.get('cloud_sync', defaultValue: false) as bool;
+  }
 
-  static Future<void> setCloudSync(bool enabled) =>
-      _settings.put('cloud_sync', enabled);
+  static Future<void> setCloudSync(bool enabled) async {
+    if (isTesting) return;
+    await _settings.put('cloud_sync', enabled);
+  }
 
-  static bool get smsEnabled =>
-      _settings.get('sms_enabled', defaultValue: false) as bool;
+  static bool get smsEnabled {
+    if (isTesting) return false;
+    return _settings.get('sms_enabled', defaultValue: false) as bool;
+  }
 
-  static Future<void> setSmsEnabled(bool enabled) =>
-      _settings.put('sms_enabled', enabled);
+  static Future<void> setSmsEnabled(bool enabled) async {
+    if (isTesting) return;
+    await _settings.put('sms_enabled', enabled);
+  }
 
-  static String? getThemeMode() =>
-      _settings.get('theme_mode') as String?;
+  static String? getThemeMode() {
+    if (isTesting) return null;
+    return _settings.get('theme_mode') as String?;
+  }
 
-  static Future<void> setThemeMode(String mode) =>
-      _settings.put('theme_mode', mode);
+  static Future<void> setThemeMode(String mode) async {
+    if (isTesting) return;
+    await _settings.put('theme_mode', mode);
+  }
 
-  static int? getPrimaryColor() =>
-      _settings.get('primary_color') as int?;
+  static int? getPrimaryColor() {
+    if (isTesting) return null;
+    return _settings.get('primary_color') as int?;
+  }
 
-  static Future<void> setPrimaryColor(int colorValue) =>
-      _settings.put('primary_color', colorValue);
+  static Future<void> setPrimaryColor(int colorValue) async {
+    if (isTesting) return;
+    await _settings.put('primary_color', colorValue);
+  }
 
   // ── Onboarding ────────────────────────────────────────────────────────────
 
