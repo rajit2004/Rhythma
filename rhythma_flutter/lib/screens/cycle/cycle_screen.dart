@@ -14,9 +14,11 @@ class CycleScreen extends StatefulWidget {
 }
 
 class _CycleScreenState extends State<CycleScreen> {
-  DateTime _displayedMonth = DateTime(2025, 11);
-  int _selectedDay = 14;
-  final DateTime _today = DateTime(2025, 11, 14);
+  // Always derive "today" from the real clock — never hardcode a date here.
+  final DateTime _today = DateTime.now();
+
+  late DateTime _displayedMonth = DateTime(_today.year, _today.month);
+  late int _selectedDay = _today.day;
 
   int get _monthDays =>
       DateTime(_displayedMonth.year, _displayedMonth.month + 1, 0).day;
@@ -39,6 +41,13 @@ class _CycleScreenState extends State<CycleScreen> {
     });
   }
 
+  void _jumpToToday() {
+    setState(() {
+      _displayedMonth = DateTime(_today.year, _today.month);
+      _selectedDay = _today.day;
+    });
+  }
+
   // Day → phase
   static String _phase(int day, AppLocalizations l10n) {
     if (day <= 5) return l10n.cyclePhasePeriod;
@@ -58,15 +67,35 @@ class _CycleScreenState extends State<CycleScreen> {
   Widget build(BuildContext context) {
     context.watch<ThemeProvider>();
     final l10n = AppLocalizations.of(context)!;
+    final cellWidth = (MediaQuery.of(context).size.width - 40 - 32) / 7;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          _ScreenHeader(
-            title: l10n.cycleTrackerTitle,
-            subtitle: DateFormat('MMMM yyyy').format(_displayedMonth),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _ScreenHeader(
+                  title: l10n.cycleTrackerTitle,
+                  subtitle: DateFormat('MMMM yyyy').format(_displayedMonth),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: TextButton.icon(
+                  onPressed: _jumpToToday,
+                  icon: const Icon(Icons.today_rounded, size: 16),
+                  label: const Text('Today'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: RhythmaColors.primary,
+                  ),
+                ),
+              ),
+            ],
           ),
 
           // Calendar card
@@ -118,12 +147,13 @@ class _CycleScreenState extends State<CycleScreen> {
                 // Days grid
                 Wrap(
                   children: [
-                    // empty cells for first weekday
+                    // Empty cells for the leading gap before day 1. These must
+                    // have a *finite* width — `double.infinity / 7` is still
+                    // `double.infinity`, which blew this grid out with a huge
+                    // blank gap. Use the same width as the real day cells.
                     ...List.generate(
                       _firstWeekday,
-                      (_) => const SizedBox(
-                          width: double.infinity / 7,
-                          height: 44),
+                      (_) => SizedBox(width: cellWidth, height: 46),
                     ),
                     ...List.generate(_monthDays, (i) {
                       final day = i + 1;
@@ -137,7 +167,7 @@ class _CycleScreenState extends State<CycleScreen> {
                       return GestureDetector(
                         onTap: () => setState(() => _selectedDay = day),
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 7 - 3,
+                          width: cellWidth,
                           height: 46,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,6 +181,9 @@ class _CycleScreenState extends State<CycleScreen> {
                                       ? phaseColor
                                       : phaseColor.withOpacity(0.14),
                                   borderRadius: BorderRadius.circular(10),
+                                  border: isToday && !isSelected
+                                      ? Border.all(color: phaseColor, width: 1.4)
+                                      : null,
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

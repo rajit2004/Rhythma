@@ -352,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onAction: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const CycleScreen()),
+                MaterialPageRoute(builder: (_) => const ShellBackground(child: CycleScreen())),
               );
             },
           ),
@@ -419,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const InsightsScreen()),
+                MaterialPageRoute(builder: (_) => const ShellBackground(child: InsightsScreen())),
               );
             },
             child: GlassCard(
