@@ -88,11 +88,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Navigator.pop(context); // Close dialog
 
                             // Clear the JWT token so the user is actually logged out.
-                            // Note: we intentionally do NOT clear local storage here.
-                            // Profile info, cycle logs, and settings are stored
-                            // on-device (see LocalStorageService) and should persist
+                            //
+                            // Intentional: we do NOT wipe local storage here.
+                            // Profile info, cycle logs, chat history, and
+                            // settings are stored on-device (see
+                            // LocalStorageService) and are meant to persist
                             // across logins — wiping them on every logout was
-                            // resetting the profile back to its defaults each time.
+                            // the cause of the profile resetting to its
+                            // defaults each time (see PR history).
+                            //
+                            // Profile/chat-history/cycle-log data is now
+                            // namespaced per account (LocalStorageService's
+                            // currentUserId scoping), so a second person
+                            // logging into a different account on this same
+                            // device gets their own data, not the previous
+                            // person's. AuthService.logout() clears the
+                            // "which account is active" pointer below.
                             await AuthService().logout();
 
                             if (context.mounted) {

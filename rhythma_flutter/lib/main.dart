@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 
 import 'components/bottom_nav.dart';
+import 'components/shared.dart';
 import 'config/theme.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
@@ -16,9 +17,9 @@ import 'screens/home/home_screen.dart';
 import 'screens/insights/insights_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'services/api_client.dart';
+import 'services/auth_service.dart';
 import 'services/local_storage_service.dart';
 import 'services/notification_service.dart';
-import 'utils/secure_storage.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -79,20 +80,23 @@ class RhythmaApp extends StatelessWidget {
         Locale('te'),
         Locale('mr'),
       ],
-      home: FutureBuilder<bool>(
-        future: SecureStorage.hasToken(),
+      home: FutureBuilder<String?>(
+        // Confirms the stored token is still genuinely valid (not merely
+        // present) via a lightweight /auth/me check, and scopes local
+        // storage to the resulting account — see AuthService.validateSession.
+        future: AuthService().validateSession(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SplashScreen();
           }
-          return snapshot.data == true ? const RhythmaShell() : const LoginScreen();
+          return snapshot.data != null ? const RhythmaShell() : const LoginScreen();
         },
       ),
       routes: {
         '/login': (_) => const LoginScreen(),
         '/register': (_) => const RegisterScreen(),
         '/home': (_) => const RhythmaShell(),
-        '/assistant': (_) => const AssistantScreen(),
+        '/assistant': (_) => const ShellBackground(child: AssistantScreen()),
       },
     );
   }

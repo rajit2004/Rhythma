@@ -54,20 +54,34 @@ class _AssistantScreenState extends State<AssistantScreen> {
       ];
 
       final saved = LocalStorageService.getChatHistory();
-      if (saved.isNotEmpty) {
-        _messages = saved
-            .map((m) => _Msg(
-                  role: m['role'] ?? 'ai',
-                  text: m['text'] ?? '',
-                  isError: m['isError'] == 'true',
-                ))
-            .toList();
+      final restored = saved
+          .map((m) => _Msg(
+                role: m['role'] ?? 'model',
+                content: m['content'] ?? '',
+                isError: m['isError'] == 'true',
+              ))
+          // Older/corrupted entries can have an empty `content` (e.g. from
+          // a previous chat-history schema, or an interrupted save) and
+          // rendered as blank, outline-only bubbles with no visible text.
+          // Drop those rather than showing dead bubbles forever.
+          .where((m) => m.content.trim().isNotEmpty)
+          .toList();
+
+      if (restored.isNotEmpty) {
+        _messages = restored;
       } else {
         _messages = [
-          _Msg(role: 'ai', text: _personalizedWelcome(l10n.assistantWelcome)),
+          _Msg(role: 'model', content: _personalizedWelcome(l10n.assistantWelcome)),
         ];
       }
       _initialized = true;
+
+      // If we actually dropped any blank entries, persist the cleaned-up
+      // list so this doesn't need to re-filter (or show a brief flash of
+      // the blank bubbles) on every future load.
+      if (restored.length != saved.length) {
+        _persistHistory();
+      }
     }
   }
 
@@ -76,7 +90,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
       _messages
           .map((m) => {
                 'role': m.role,
-                'text': m.text,
+                'content': m.content,
                 'isError': m.isError.toString(),
               })
           .toList(),
@@ -89,6 +103,8 @@ class _AssistantScreenState extends State<AssistantScreen> {
 
     // Build conversation context from what's already on screen so the
     // assistant can answer follow-up questions, not just isolated ones.
+    // _Msg already uses the same role/content vocabulary as the backend's
+    // ChatMessage model, so no translation is needed here.
     final history = _messages
         .where((m) => !m.isError)
         .toList()
@@ -96,14 +112,11 @@ class _AssistantScreenState extends State<AssistantScreen> {
         .take(10)
         .toList()
         .reversed
-        .map((m) => {
-              'role': m.role == 'user' ? 'user' : 'model',
-              'content': m.text,
-            })
+        .map((m) => {'role': m.role, 'content': m.content})
         .toList();
 
     setState(() {
-      _messages.add(_Msg(role: 'user', text: t));
+      _messages.add(_Msg(role: 'user', content: t));
       _isLoading = true;
     });
     _ctrl.clear();
@@ -118,12 +131,12 @@ class _AssistantScreenState extends State<AssistantScreen> {
       );
       setState(() {
         _isLoading = false;
-        _messages.add(_Msg(role: 'ai', text: responseText));
+        _messages.add(_Msg(role: 'model', content: responseText));
       });
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _messages.add(_Msg(role: 'ai', text: 'Error: ${e.toString()}', isError: true));
+        _messages.add(_Msg(role: 'model', content: 'Error: ${e.toString()}', isError: true));
       });
     }
     _scrollToBottom();
@@ -155,7 +168,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
     final l10n = AppLocalizations.of(context)!;
     final lang = LocalStorageService.preferredLanguage;
 
-    // ✅ Wrapped in Scaffold
+    //  Wrapped in Scaffold
     return Scaffold(
       backgroundColor: RhythmaColors.background,
       appBar: AppBar(
@@ -292,13 +305,19 @@ class _AssistantScreenState extends State<AssistantScreen> {
   }
 }
 
-// ─── Helper widgets (unchanged) ──────────────────────────────────────────────
+// ─── Helper widgets ──────────────────────────────────────────────
 
+/// Canonical local message shape — deliberately mirrors the backend's
+/// `ChatMessage` model (role: "user" | "model", content: String) so the
+/// same vocabulary is used end-to-end: in widget state, in on-device
+/// persistence, and in the API request/response. Previously this used
+/// "ai"/"text" locally while the backend used "model"/"content", requiring
+/// a translation layer between the two — that mismatch is now removed.
 class _Msg {
   final String role;
-  final String text;
+  final String content;
   final bool isError;
-  const _Msg({required this.role, required this.text, this.isError = false});
+  const _Msg({required this.role, required this.content, this.isError = false});
 }
 
 class _ChatBubble extends StatelessWidget {
@@ -346,10 +365,10 @@ class _ChatBubble extends StatelessWidget {
                       ),
               ),
               child: isUser
-                  ? Text(msg.text,
+                  ? Text(msg.content,
                       style: const TextStyle(fontSize: 14, height: 1.5, color: Colors.white))
                   : _FormattedMessage(
-                      text: msg.text,
+                      text: msg.content,
                       color: msg.isError ? Colors.red.shade700 : RhythmaColors.foreground,
                     ),
             ),

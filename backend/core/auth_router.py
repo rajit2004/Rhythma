@@ -6,6 +6,7 @@ from core.auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     get_password_hash,
     verify_password,
+    get_current_user,
 )
 from models.user import UserCreate, UserResponse
 from services.firestore_service import UserService
@@ -67,3 +68,16 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user["id"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/me")
+async def get_me(current_user: dict = Depends(get_current_user)):
+    """Returns the signed-in user's basic identity.
+
+    This is deliberately lightweight — its main purpose is to double as a
+    token-validation check: `get_current_user` already raises 401 if the
+    token is expired, malformed, or the account no longer exists, so a
+    successful response here means the stored token is genuinely still
+    good (used by the Flutter app at launch, see main.dart).
+    """
+    return current_user
