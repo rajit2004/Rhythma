@@ -205,6 +205,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logLabelSymptoms => 'Symptoms';
 
   @override
+  String get logToday => 'Log Today';
+
+  @override
+  String get logTitle => 'Log your day';
+
+  @override
+  String get logFlowIntensity => 'Flow Intensity';
+
+  @override
+  String get logMood => 'Mood';
+
+  @override
+  String get logSleepHours => 'Sleep Hours';
+
+  @override
+  String get logStressLevel => 'Stress Level';
+
+  @override
+  String get logSave => 'Save Log';
+
+  @override
+  String get logSympFatigue => 'Fatigue';
+
+  @override
+  String get logSympNausea => 'Nausea';
+
+  @override
+  String get logSympBackPain => 'Back Pain';
+
+  @override
   String get assistantTitle => 'Rhythma Assistant';
 
   @override

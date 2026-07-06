@@ -10,6 +10,7 @@ import '../../services/api_client.dart';
 import '../../services/local_storage_service.dart';
 import '../../utils/secure_storage.dart';
 import '../cycle/cycle_screen.dart';
+import '../cycle/components/log_entry_sheet.dart';
 import '../insights/insights_screen.dart';
 import '../settings/language_screen.dart';
 import 'dart:convert';
@@ -352,10 +353,21 @@ class _HomeScreenState extends State<HomeScreen> {
             title: l10n.homeFeelingTitle,
             action: l10n.homeLogAll,
             onAction: () {
-              Navigator.push(
+              final currentDate = DateTime.now();
+              final dateKey = currentDate.toIso8601String().split('T')[0];
+              final logs = LocalStorageService.getCycleLogs();
+              final existingLog = logs.cast<Map<String, dynamic>?>().firstWhere(
+                    (log) => log?['start_date'] == dateKey,
+                    orElse: () => null,
+                  );
+
+              LogEntrySheet.show(
                 context,
-                MaterialPageRoute(builder: (_) => const ShellBackground(child: CycleScreen())),
-              );
+                currentDate,
+                existingLog: existingLog,
+              ).then((_) {
+                setState(() {}); // Refresh home screen after logging
+              });
             },
           ),
           Row(

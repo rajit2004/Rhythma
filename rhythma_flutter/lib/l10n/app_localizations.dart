@@ -488,6 +488,66 @@ abstract class AppLocalizations {
   /// **'Symptoms'**
   String get logLabelSymptoms;
 
+  /// No description provided for @logToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Today'**
+  String get logToday;
+
+  /// No description provided for @logTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your day'**
+  String get logTitle;
+
+  /// No description provided for @logFlowIntensity.
+  ///
+  /// In en, this message translates to:
+  /// **'Flow Intensity'**
+  String get logFlowIntensity;
+
+  /// No description provided for @logMood.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get logMood;
+
+  /// No description provided for @logSleepHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Hours'**
+  String get logSleepHours;
+
+  /// No description provided for @logStressLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stress Level'**
+  String get logStressLevel;
+
+  /// No description provided for @logSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Log'**
+  String get logSave;
+
+  /// No description provided for @logSympFatigue.
+  ///
+  /// In en, this message translates to:
+  /// **'Fatigue'**
+  String get logSympFatigue;
+
+  /// No description provided for @logSympNausea.
+  ///
+  /// In en, this message translates to:
+  /// **'Nausea'**
+  String get logSympNausea;
+
+  /// No description provided for @logSympBackPain.
+  ///
+  /// In en, this message translates to:
+  /// **'Back Pain'**
+  String get logSympBackPain;
+
   /// No description provided for @assistantTitle.
   ///
   /// In en, this message translates to:
