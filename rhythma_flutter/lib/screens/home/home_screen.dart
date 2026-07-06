@@ -92,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final mhs = _insights['mhs'] ?? 82;
     final cvi = _insights['cvi'] ?? 'Low';
     final sleepHours = _insights['sleepHours'] ?? '7.2h';
-    final greeting = '${l10n.homeGreeting}, $userName';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
@@ -109,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        greeting,
+                        '${l10n.homeGreeting}, $userName',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -139,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 8),
                 _HeaderIcon(
                   icon: Icons.shield_outlined,
-                  onTap: () => _showComingSoonDialog(context, 'Privacy & Security'),
+                  onTap: () =>
+                      _showComingSoonDialog(context, 'Privacy & Security'),
                 ),
               ],
             ),
@@ -236,11 +236,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        _StatCell(label: 'MHS', value: '$mhs', color: RhythmaColors.primary),
+                        _StatCell(
+                            label: 'MHS',
+                            value: '$mhs',
+                            color: RhythmaColors.primary),
                         _StatDivider(),
-                        _StatCell(label: 'CVI', value: '$cvi', color: RhythmaColors.teal),
+                        _StatCell(
+                            label: 'CVI',
+                            value: '$cvi',
+                            color: RhythmaColors.teal),
                         _StatDivider(),
-                        _StatCell(label: 'Sleep', value: '$sleepHours', color: RhythmaColors.coral),
+                        _StatCell(
+                            label: 'Sleep',
+                            value: '$sleepHours',
+                            color: RhythmaColors.coral),
                       ],
                     ),
                   ],
@@ -270,7 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.auto_awesome_rounded, size: 14, color: Colors.white),
+                        Icon(Icons.auto_awesome_rounded,
+                            size: 14, color: Colors.white),
                         const SizedBox(width: 6),
                         Text(
                           l10n.homeAiTitle,
@@ -304,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 10),
+                                  horizontal: 14, vertical: 10),
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(20),
@@ -335,7 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.white.withOpacity(0.25),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Icon(Icons.mic_rounded, size: 18, color: Colors.white),
+                          child: Icon(Icons.mic_rounded,
+                              size: 18, color: Colors.white),
                         ),
                       ],
                     ),
@@ -354,7 +365,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onAction: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ShellBackground(child: CycleScreen())),
+                MaterialPageRoute(
+                    builder: (_) =>
+                        const ShellBackground(child: CycleScreen())),
               );
             },
           ),
@@ -369,7 +382,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogFlow,
                   icon: Icons.water_drop_outlined,
                   color: RhythmaColors.rose,
-                  options: [l10n.logNone, l10n.logLight, l10n.logMedium, l10n.logHeavy],
+                  options: [
+                    l10n.logNone,
+                    l10n.logLight,
+                    l10n.logMedium,
+                    l10n.logHeavy
+                  ],
                 ),
               ),
               const SizedBox(width: 10),
@@ -395,7 +413,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogSleep,
                   icon: Icons.bedtime_outlined,
                   color: RhythmaColors.primary,
-                  options: [l10n.logSleep1, l10n.logSleep2, l10n.logSleep3, l10n.logSleep4],
+                  options: [
+                    l10n.logSleep1,
+                    l10n.logSleep2,
+                    l10n.logSleep3,
+                    l10n.logSleep4
+                  ],
                 ),
               ),
               const SizedBox(width: 10),
@@ -408,7 +431,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: l10n.homeLogStress,
                   icon: Icons.air_rounded,
                   color: RhythmaColors.teal,
-                  options: [l10n.logEnergyLow, l10n.logEnergyMid, l10n.logEnergyHigh],
+                  options: [
+                    l10n.logEnergyLow,
+                    l10n.logEnergyMid,
+                    l10n.logEnergyHigh
+                  ],
                 ),
               ),
             ],
@@ -421,52 +448,55 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ShellBackground(child: InsightsScreen())),
+                MaterialPageRoute(
+                    builder: (_) =>
+                        const ShellBackground(child: InsightsScreen())),
               );
             },
             child: GlassCard(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.homeWeeklyInsightLabel,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: RhythmaColors.teal,
-                          letterSpacing: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.homeWeeklyInsightLabel,
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: RhythmaColors.teal,
+                            letterSpacing: 1,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        l10n.homeWeeklyInsightTitle,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: RhythmaColors.foreground,
-                          height: 1.35,
+                        const SizedBox(height: 6),
+                        Text(
+                          l10n.homeWeeklyInsightTitle,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: RhythmaColors.foreground,
+                            height: 1.35,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        l10n.homeWeeklyInsightDesc,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: RhythmaColors.mutedFg,
-                          height: 1.4,
+                        const SizedBox(height: 6),
+                        Text(
+                          l10n.homeWeeklyInsightDesc,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: RhythmaColors.mutedFg,
+                            height: 1.4,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
-              ],
-            ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.chevron_right_rounded,
+                      color: RhythmaColors.mutedFg),
+                ],
+              ),
             ),
           ),
 
@@ -483,21 +513,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: l10n.homeLearnPcos,
                   color: RhythmaColors.rose,
                   label: l10n.homeArticle,
-                  onTap: () => _showComingSoonDialog(context, l10n.homeLearnPcos),
+                  onTap: () =>
+                      _showComingSoonDialog(context, l10n.homeLearnPcos),
                 ),
                 const SizedBox(width: 10),
                 _LearnCard(
                   title: l10n.homeLearnHormones,
                   color: RhythmaColors.primary,
                   label: l10n.homeArticle,
-                  onTap: () => _showComingSoonDialog(context, l10n.homeLearnHormones),
+                  onTap: () =>
+                      _showComingSoonDialog(context, l10n.homeLearnHormones),
                 ),
                 const SizedBox(width: 10),
                 _LearnCard(
                   title: l10n.homeLearnIron,
                   color: RhythmaColors.coral,
                   label: l10n.homeArticle,
-                  onTap: () => _showComingSoonDialog(context, l10n.homeLearnIron),
+                  onTap: () =>
+                      _showComingSoonDialog(context, l10n.homeLearnIron),
                 ),
               ],
             ),
@@ -506,14 +539,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
- // ─── Helpers ────────────────────────────────────────────────────────────
+
+  // ─── Helpers ────────────────────────────────────────────────────────────
 
   void _showComingSoonDialog(BuildContext context, String topic) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Coming Soon', textAlign: TextAlign.center, style: TextStyle(color: RhythmaColors.primary)),
+        title: Text('Coming Soon',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: RhythmaColors.primary)),
         content: Text(
           '$topic is currently under development.',
           textAlign: TextAlign.center,
@@ -584,7 +620,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: options.map((opt) {
                   return GestureDetector(
                     onTap: () async {
-                      await LocalStorageService.saveQuickLogField(DateTime.now(), field, opt);
+                      await LocalStorageService.saveQuickLogField(
+                          DateTime.now(), field, opt);
                       if (ctx.mounted) Navigator.pop(ctx);
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -593,7 +630,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 9),
                       decoration: BoxDecoration(
                         color: RhythmaColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(20),
@@ -601,7 +639,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Text(
                         opt,
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: RhythmaColors.foreground),
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: RhythmaColors.foreground),
                       ),
                     ),
                   );
@@ -662,9 +703,7 @@ class _StatCell extends StatelessWidget {
           const SizedBox(height: 3),
           Text(value,
               style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: color)),
+                  fontSize: 15, fontWeight: FontWeight.w700, color: color)),
         ],
       ),
     );
@@ -687,7 +726,10 @@ class _LogButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   const _LogButton(
-      {required this.icon, required this.label, required this.color, this.onTap});
+      {required this.icon,
+      required this.label,
+      required this.color,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -725,7 +767,11 @@ class _LearnCard extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const _LearnCard({required this.title, required this.color, required this.label, this.onTap});
+  const _LearnCard(
+      {required this.title,
+      required this.color,
+      required this.label,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -734,50 +780,52 @@ class _LearnCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-      width: 152,
-      decoration: BoxDecoration(
-        gradient: isDark
-            ? null
-            : LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color, Color.lerp(color, RhythmaColors.primary, 0.5)!],
-              ),
-        color: isDark ? color.withOpacity(0.15) : null,
-        border: isDark ? Border.all(color: color.withOpacity(0.3)) : null,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-                fontSize: 9,
-                fontWeight: FontWeight.w700,
-                color: Colors.white.withOpacity(0.75),
-                letterSpacing: 1),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              height: 1.25,
+        width: 152,
+        decoration: BoxDecoration(
+          gradient: isDark
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    color,
+                    Color.lerp(color, RhythmaColors.primary, 0.5)!
+                  ],
+                ),
+          color: isDark ? color.withOpacity(0.15) : null,
+          border: isDark ? Border.all(color: color.withOpacity(0.3)) : null,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withOpacity(0.75),
+                  letterSpacing: 1),
             ),
-          ),
-        ],
-      ),
+            const SizedBox(height: 4),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                height: 1.25,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 extension on Widget {
-  Widget opacity(double value) =>
-      Opacity(opacity: value, child: this);
+  Widget opacity(double value) => Opacity(opacity: value, child: this);
 }

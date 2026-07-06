@@ -101,7 +101,7 @@ void main() {
     await tester.enterText(nameField, '');
     await tester.enterText(ageField, '5');
     await tester.enterText(cycleField, '50');
-    
+
     // Tap Save Changes
     await tester.tap(find.text('Save Changes'));
     await tester.pumpAndSettle();
@@ -126,7 +126,7 @@ void main() {
     expect(find.text('Aarya Updated'), findsOneWidget);
     expect(find.text('25 years old'), findsOneWidget);
     expect(find.text('30 days'), findsOneWidget);
-    
+
     // Verify changes are written to local storage
     expect(LocalStorageService.mockProfile?['name'], 'Aarya Updated');
     expect(LocalStorageService.mockProfile?['age'], 25);
@@ -226,7 +226,7 @@ void main() {
     // Tap Log Out again to test confirm logout
     await tester.tap(find.text('Log Out'));
     await tester.pumpAndSettle();
-    
+
     // Tap Log Out inside the confirmation dialog (which is an ElevatedButton)
     final dialogLogoutButton = find.descendant(
       of: find.byType(ElevatedButton),
@@ -235,11 +235,14 @@ void main() {
     await tester.tap(dialogLogoutButton);
     await tester.pumpAndSettle();
 
-    // Verify we are back on Profile screen and settings/dialog are dismissed
-    expect(find.text('Settings'), findsNothing);
-    
-    // Verify local storage is cleared
-    expect(LocalStorageService.mockProfile, isNull);
+    // Logout intentionally clears only the auth session (JWT) — local
+    // device data (profile, emergency contacts) is treated as a
+    // persistent on-device health record and deliberately survives
+    // logout, so a user isn't greeted with a wiped-looking profile just
+    // from signing out and back in. See settings_screen.dart and
+    // LocalStorageService.clearAll()'s doc comment for the full rationale.
+    expect(LocalStorageService.mockProfile, isNotNull);
+    expect(LocalStorageService.mockProfile?['name'], 'Aarya Test');
     expect(LocalStorageService.mockEmergencyContacts, isEmpty);
   });
 }
