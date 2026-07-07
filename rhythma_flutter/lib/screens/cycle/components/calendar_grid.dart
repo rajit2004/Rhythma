@@ -76,14 +76,14 @@ class _CalendarGridState extends State<CalendarGrid> {
                 
                 final hasLog = cycleProvider.hasLogsForDate(currentDate);
 
+                final isFuture = currentDate.isAfter(DateTime(today.year, today.month, today.day));
+
                 return GestureDetector(
-                  onTap: () {
-                    context.read<CycleProvider>().selectDate(currentDate);
-                    // Also trigger symptom log toggle in this mock version if they tap twice? 
-                    // Wait, let's keep selecting separate from toggling. They toggle in the bottom UI.
-                    // But the plan says "Tapping a day should open the symptom logging flow or show existing daily data."
-                    // Since the log section is below the calendar, selecting the date naturally shows its data.
-                  },
+                  onTap: isFuture
+                      ? null
+                      : () {
+                          context.read<CycleProvider>().selectDate(currentDate);
+                        },
                   child: SizedBox(
                     width: cellWidth,
                     height: 46,
@@ -95,9 +95,11 @@ class _CalendarGridState extends State<CalendarGrid> {
                           width: 34,
                           height: 34,
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? phaseColor
-                                : phaseColor.withOpacity(0.14),
+                            color: isFuture
+                                ? Colors.transparent
+                                : isSelected
+                                    ? phaseColor
+                                    : phaseColor.withOpacity(0.14),
                             borderRadius: BorderRadius.circular(10),
                             border: isToday && !isSelected
                                 ? Border.all(color: phaseColor, width: 1.4)
@@ -113,9 +115,11 @@ class _CalendarGridState extends State<CalendarGrid> {
                                   fontWeight: isToday && !isSelected
                                       ? FontWeight.w800
                                       : FontWeight.w600,
-                                  color: isSelected
-                                      ? Colors.white
-                                      : RhythmaColors.foreground,
+                                  color: isFuture
+                                      ? RhythmaColors.mutedFg.withOpacity(0.4)
+                                      : isSelected
+                                          ? Colors.white
+                                          : RhythmaColors.foreground,
                                 ),
                               ),
                               // Marker for logged symptoms
