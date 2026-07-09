@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import 'package:rhythma/screens/profile/profile_screen.dart';
-import 'package:rhythma/screens/settings/settings_screen.dart';
 import 'package:rhythma/services/local_storage_service.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/providers/theme_provider.dart';
