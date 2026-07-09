@@ -7,7 +7,7 @@ import '../../components/charts.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/local_storage_service.dart';
-import '../cycle/components/log_entry_sheet.dart';
+import '../cycle/cycle_screen.dart';
 import '../insights/insights_screen.dart';
 import '../settings/language_screen.dart';
 
