@@ -133,7 +133,7 @@ class _SmsScreenState extends State<SmsScreen> {
               children: [
                 Row(
                   children: [
-                    TintedIcon(
+                    const TintedIcon(
                         icon: Icons.sms_rounded, color: RhythmaColors.teal),
                     const SizedBox(width: 12),
                     Expanded(

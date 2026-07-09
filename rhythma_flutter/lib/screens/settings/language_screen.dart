@@ -29,7 +29,7 @@ class LanguageScreen extends StatelessWidget {
           title: Text(l10n.selectLanguage),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_rounded),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => Navigator.pop(context),
           ),
         ),

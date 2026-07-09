@@ -105,22 +105,18 @@ class RhythmaTheme {
             secondary: RhythmaColors.teal,
             tertiary: RhythmaColors.rose,
             surface: RhythmaColors.surface,
-            background: RhythmaColors.background,
             onPrimary: RhythmaColors.primaryFg,
             onSecondary: RhythmaColors.tealFg,
             onSurface: RhythmaColors.foreground,
-            onBackground: RhythmaColors.foreground,
           )
         : ColorScheme.light(
             primary: RhythmaColors.primary,
             secondary: RhythmaColors.teal,
             tertiary: RhythmaColors.rose,
             surface: RhythmaColors.surface,
-            background: RhythmaColors.background,
             onPrimary: RhythmaColors.primaryFg,
             onSecondary: RhythmaColors.tealFg,
             onSurface: RhythmaColors.foreground,
-            onBackground: RhythmaColors.foreground,
           );
 
     return ThemeData(

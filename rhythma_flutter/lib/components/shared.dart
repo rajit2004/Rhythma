@@ -14,8 +14,7 @@ import '../config/theme.dart';
 class ShellBackground extends StatelessWidget {
   final Widget child;
   final bool showBackButton;
-  const ShellBackground({Key? key, required this.child, this.showBackButton = true})
-      : super(key: key);
+  const ShellBackground({super.key, required this.child, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +43,13 @@ class GlassCard extends StatelessWidget {
   final double? borderRadius;
   final VoidCallback? onTap;
 
-  GlassCard({
-    Key? key,
+  const GlassCard({
+    super.key,
     required this.child,
     this.padding = const EdgeInsets.all(20),
     this.borderRadius,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +97,12 @@ class GradientBox extends StatelessWidget {
   final List<Color>? colors;
 
   const GradientBox({
-    Key? key,
+    super.key,
     required this.child,
     this.padding = const EdgeInsets.all(20),
     this.borderRadius = 24,
     this.colors,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -145,12 +144,12 @@ class TintedIcon extends StatelessWidget {
   final Color color;
   final double size;
 
-  TintedIcon({
-    Key? key,
+  const TintedIcon({
+    super.key,
     required this.icon,
     required this.color,
     this.size = 36,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,12 +171,12 @@ class SectionHeader extends StatelessWidget {
   final String? action;
   final VoidCallback? onAction;
 
-  SectionHeader({
-    Key? key,
+  const SectionHeader({
+    super.key,
     required this.title,
     this.action,
     this.onAction,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -219,10 +218,10 @@ class RhythmaScaffold extends StatelessWidget {
   final bool extendBody;
 
   const RhythmaScaffold({
-    Key? key,
+    super.key,
     required this.body,
     this.extendBody = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

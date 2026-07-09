@@ -136,6 +136,26 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeArticle => 'వ్యాసం';
 
   @override
+  String get homeFailedLoad => 'డ్యాష్‌బోర్డ్‌ను లోడ్ చేయడం విఫలమైంది';
+
+  @override
+  String get homeRetry => 'మళ్లీ ప్రయత్నించండి';
+
+  @override
+  String get homeComingSoon => 'త్వరలో';
+
+  @override
+  String homeUnderDevelopment(String topic) {
+    return '$topic ప్రస్తుతం అభివృద్ధిలో ఉంది.';
+  }
+
+  @override
+  String get homePrivacySecurity => 'గోప్యత & భద్రత';
+
+  @override
+  String get homeOk => 'సరే';
+
+  @override
   String get cycleTrackerTitle => 'సైకిల్ ట్రాకర్';
 
   @override
@@ -203,6 +223,36 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get logLabelSymptoms => 'లక్షణాలు';
+
+  @override
+  String get logToday => 'ఈ రోజు లాగ్ చేయండి';
+
+  @override
+  String get logTitle => 'మీ రోజును లాగ్ చేయండి';
+
+  @override
+  String get logFlowIntensity => 'ప్రవాహ తీవ్రత';
+
+  @override
+  String get logMood => 'మానసిక స్థితి';
+
+  @override
+  String get logSleepHours => 'నిద్ర గంటలు';
+
+  @override
+  String get logStressLevel => 'ఒత్తిడి స్థాయి';
+
+  @override
+  String get logSave => 'లాగ్‌ను భద్రపరుచు';
+
+  @override
+  String get logSympFatigue => 'అలసట';
+
+  @override
+  String get logSympNausea => 'వికారం';
+
+  @override
+  String get logSympBackPain => 'వెన్నునొప్పి';
 
   @override
   String get assistantTitle => 'రిథ్మా సహాయకుడు';

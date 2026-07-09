@@ -9,7 +9,7 @@ import '../../providers/cycle_provider.dart';
 import 'components/calendar_grid.dart';
 
 class CycleScreen extends StatefulWidget {
-  const CycleScreen({Key? key}) : super(key: key);
+  const CycleScreen({super.key});
 
   @override
   State<CycleScreen> createState() => _CycleScreenState();

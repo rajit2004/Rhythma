@@ -8,6 +8,7 @@ import 'package:rhythma/services/local_storage_service.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/providers/theme_provider.dart';
 import 'package:rhythma/providers/profile_provider.dart';
+import 'package:rhythma/screens/cycle/components/log_entry_sheet.dart';
 
 void main() {
   setUp(() {
@@ -243,5 +244,83 @@ void main() {
     expect(LocalStorageService.mockProfile, isNotNull);
     expect(LocalStorageService.mockProfile?['name'], 'Aarya Test');
     expect(LocalStorageService.mockEmergencyContacts, isEmpty);
+  });
+
+  testWidgets('5. Log Entry Sheet create, edit, save flows', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => LocaleProvider()),
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+          ],
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  LogEntrySheet.show(
+                    context,
+                    DateTime(2023, 10, 1),
+                    existingLog: {
+                      'start_date': '2023-10-01',
+                      'flow_intensity': 'Medium',
+                      'mood': '😌',
+                      'sleep_hours': 7,
+                      'stress_level': 2,
+                      'symptoms': ['Cramps', 'Fatigue'],
+                    },
+                  );
+                },
+                child: const Text('Open Sheet'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Open the sheet
+    await tester.tap(find.text('Open Sheet'));
+    await tester.pumpAndSettle();
+
+    // Verify UI rendering and pre-filled data
+    expect(find.text('Log your day'), findsOneWidget);
+    
+    // Check flow intensity
+    expect(find.text('Medium'), findsWidgets);
+    
+    // Check mood emoji
+    expect(find.text('😌'), findsWidgets);
+    
+    // Check symptoms
+    expect(find.text('Cramps'), findsWidgets);
+    expect(find.text('Fatigue'), findsWidgets);
+
+    // Interact with chips
+    await tester.tap(find.text('Nausea'));
+    await tester.pumpAndSettle();
+
+    // Save
+    await tester.tap(find.text('Save Log'));
+    await tester.pumpAndSettle();
+
+    // Sheet should be closed
+    expect(find.text('Log your day'), findsNothing);
   });
 }

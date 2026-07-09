@@ -4,15 +4,15 @@ import 'package:rhythma/l10n/app_localizations.dart';
 import '../../config/theme.dart';
 import '../../components/shared.dart';
 import '../../components/charts.dart';
-import '../../providers/theme_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/local_storage_service.dart';
-import '../cycle/cycle_screen.dart';
+import '../../providers/theme_provider.dart';
+import '../cycle/components/log_entry_sheet.dart';
 import '../insights/insights_screen.dart';
 import '../settings/language_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -64,18 +64,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: RhythmaColors.rose),
+            const Icon(Icons.error_outline, size: 48, color: RhythmaColors.rose),
             const SizedBox(height: 16),
             Text(
-              'Failed to load dashboard',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              l10n.homeFailedLoad,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
             Text(_error, style: TextStyle(color: RhythmaColors.mutedFg)),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _fetchDashboardData,
-              child: Text('Retry'),
+              child: Text(l10n.homeRetry),
             ),
           ],
         ),
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _HeaderIcon(
                   icon: Icons.shield_outlined,
                   onTap: () =>
-                      _showComingSoonDialog(context, 'Privacy & Security'),
+                      _showComingSoonDialog(context, l10n.homePrivacySecurity),
                 ),
               ],
             ),
@@ -212,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     TextSpan(text: l10n.homeFertileWindow),
                                     TextSpan(
                                       text: l10n.homeHighEnergy,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: RhythmaColors.rose,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -276,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.auto_awesome_rounded,
+                        const Icon(Icons.auto_awesome_rounded,
                             size: 14, color: Colors.white),
                         const SizedBox(width: 6),
                         Text(
@@ -293,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 8),
                     Text(
                       l10n.homeAiSubtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -342,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.white.withOpacity(0.25),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Icon(Icons.mic_rounded,
+                          child: const Icon(Icons.mic_rounded,
                               size: 18, color: Colors.white),
                         ),
                       ],
@@ -360,12 +360,21 @@ class _HomeScreenState extends State<HomeScreen> {
             title: l10n.homeFeelingTitle,
             action: l10n.homeLogAll,
             onAction: () {
-              Navigator.push(
+              final currentDate = DateTime.now();
+              final dateKey = currentDate.toIso8601String().split('T')[0];
+              final logs = LocalStorageService.getCycleLogs();
+              final existingLog = logs.cast<Map<String, dynamic>?>().firstWhere(
+                    (log) => log?['start_date'] == dateKey,
+                    orElse: () => null,
+                  );
+
+              LogEntrySheet.show(
                 context,
-                MaterialPageRoute(
-                    builder: (_) =>
-                        const ShellBackground(child: CycleScreen())),
-              );
+                currentDate,
+                existingLog: existingLog,
+              ).then((_) {
+                setState(() {}); // Refresh home screen after logging
+              });
             },
           ),
           Row(
@@ -460,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           l10n.homeWeeklyInsightLabel,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                             color: RhythmaColors.teal,
@@ -540,15 +549,16 @@ class _HomeScreenState extends State<HomeScreen> {
   // ─── Helpers ────────────────────────────────────────────────────────────
 
   void _showComingSoonDialog(BuildContext context, String topic) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Coming Soon',
+        title: Text(l10n.homeComingSoon,
             textAlign: TextAlign.center,
             style: TextStyle(color: RhythmaColors.primary)),
         content: Text(
-          '$topic is currently under development.',
+          l10n.homeUnderDevelopment(topic),
           textAlign: TextAlign.center,
         ),
         actionsAlignment: MainAxisAlignment.center,
@@ -559,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
               foregroundColor: RhythmaColors.primaryFg,
             ),
             onPressed: () => Navigator.pop(ctx),
-            child: Text('OK'),
+            child: Text(l10n.homeOk),
           ),
         ],
       ),
@@ -809,7 +819,7 @@ class _LearnCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,

@@ -7,7 +7,7 @@ import '../../providers/theme_provider.dart';
 import '../../services/assistant_service.dart';
 
 class AssistantScreen extends StatefulWidget {
-  const AssistantScreen({Key? key}) : super(key: key);
+  const AssistantScreen({super.key});
   @override
   State<AssistantScreen> createState() => _AssistantScreenState();
 }
@@ -185,7 +185,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                 Container(
                   width: 40, height: 40,
                   decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-                  child: Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
+                  child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -289,7 +289,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                             color: _isLoading ? RhythmaColors.mutedFg.withOpacity(0.25) : null,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.send_rounded, color: Colors.white, size: 18),
+                          child: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
                         ),
                       ),
                     ),
@@ -335,7 +335,7 @@ class _ChatBubble extends StatelessWidget {
             Container(
               width: 28, height: 28,
               decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-              child: Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
+              child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
             ),
             const SizedBox(width: 8),
           ],
@@ -455,7 +455,7 @@ class _TypingBubble extends StatelessWidget {
         Container(
           width: 28, height: 28,
           decoration: BoxDecoration(gradient: RhythmaGradients.primary, shape: BoxShape.circle),
-          child: Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
+          child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 14),
         ),
         const SizedBox(width: 8),
         Container(

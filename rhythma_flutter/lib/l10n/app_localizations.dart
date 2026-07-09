@@ -350,6 +350,42 @@ abstract class AppLocalizations {
   /// **'ARTICLE'**
   String get homeArticle;
 
+  /// No description provided for @homeFailedLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load dashboard'**
+  String get homeFailedLoad;
+
+  /// No description provided for @homeRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get homeRetry;
+
+  /// No description provided for @homeComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get homeComingSoon;
+
+  /// No description provided for @homeUnderDevelopment.
+  ///
+  /// In en, this message translates to:
+  /// **'{topic} is currently under development.'**
+  String homeUnderDevelopment(String topic);
+
+  /// No description provided for @homePrivacySecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Security'**
+  String get homePrivacySecurity;
+
+  /// No description provided for @homeOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get homeOk;
+
   /// No description provided for @cycleTrackerTitle.
   ///
   /// In en, this message translates to:
@@ -487,6 +523,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Symptoms'**
   String get logLabelSymptoms;
+
+  /// No description provided for @logToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Today'**
+  String get logToday;
+
+  /// No description provided for @logTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your day'**
+  String get logTitle;
+
+  /// No description provided for @logFlowIntensity.
+  ///
+  /// In en, this message translates to:
+  /// **'Flow Intensity'**
+  String get logFlowIntensity;
+
+  /// No description provided for @logMood.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get logMood;
+
+  /// No description provided for @logSleepHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Hours'**
+  String get logSleepHours;
+
+  /// No description provided for @logStressLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stress Level'**
+  String get logStressLevel;
+
+  /// No description provided for @logSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Log'**
+  String get logSave;
+
+  /// No description provided for @logSympFatigue.
+  ///
+  /// In en, this message translates to:
+  /// **'Fatigue'**
+  String get logSympFatigue;
+
+  /// No description provided for @logSympNausea.
+  ///
+  /// In en, this message translates to:
+  /// **'Nausea'**
+  String get logSympNausea;
+
+  /// No description provided for @logSympBackPain.
+  ///
+  /// In en, this message translates to:
+  /// **'Back Pain'**
+  String get logSympBackPain;
 
   /// No description provided for @assistantTitle.
   ///

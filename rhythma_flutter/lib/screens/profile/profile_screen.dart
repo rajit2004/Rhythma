@@ -10,7 +10,7 @@ import '../../providers/profile_provider.dart';
 import '../onboarding/onboarding_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           child: Container(
             decoration: BoxDecoration(
               color: RhythmaColors.surface,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
             padding: const EdgeInsets.all(24),
             child: Column(
@@ -373,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             child: Container(
               decoration: BoxDecoration(
                 color: RhythmaColors.surface,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -410,14 +410,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           final contact = contacts[index];
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: TintedIcon(
+                            leading: const TintedIcon(
                               icon: Icons.contact_phone_rounded,
                               color: RhythmaColors.rose,
                               size: 36,
                             ),
                             title: Text(
                               contact['name'] ?? '',
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: const TextStyle(fontWeight: FontWeight.w600),
                             ),
                             subtitle: Text(
                               contact['phone'] ?? '',
@@ -427,13 +427,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.edit_rounded, size: 20),
+                                  icon: const Icon(Icons.edit_rounded, size: 20),
                                   onPressed: () {
                                     _showAddEditContactDialog(index, setSheetState);
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete_outline_rounded,
+                                  icon: const Icon(Icons.delete_outline_rounded,
                                       color: RhythmaColors.coral, size: 20),
                                   onPressed: () async {
                                     setSheetState(() {
@@ -512,7 +512,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.water_drop, color: RhythmaColors.teal, size: 16),
+              const Icon(Icons.water_drop, color: RhythmaColors.teal, size: 16),
               const SizedBox(width: 4),
               Text(
                 '${AppLocalizations.of(context)!.profileCycleDay} $_cycleDay • ${_getCyclePhase(_cycleDay)}',
