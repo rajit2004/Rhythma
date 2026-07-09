@@ -36,7 +36,7 @@ Please read this guide before opening an issue or pull request.
 ## Project Setup
 
 ```
-git clone https://github.com/<your-fork>/Rhythma.git
+git clone https://github.com/ishita2740/Rhythma.git
 cd Rhythma
 ```
 
