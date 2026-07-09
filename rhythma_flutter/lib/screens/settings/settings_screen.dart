@@ -10,7 +10,6 @@ import '../../providers/theme_provider.dart';
 import 'language_screen.dart';
 import 'theme_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);

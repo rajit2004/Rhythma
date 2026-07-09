@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import '../../../config/theme.dart';
 import '../../../providers/cycle_provider.dart';
@@ -28,7 +27,6 @@ class _CalendarGridState extends State<CalendarGrid> {
   @override
   Widget build(BuildContext context) {
     final cycleProvider = context.watch<CycleProvider>();
-    final l10n = AppLocalizations.of(context)!;
     
     // Calculate cell width based on screen size, similar to before
     final cellWidth = (MediaQuery.of(context).size.width - 40 - 32) / 7;
