@@ -291,7 +291,7 @@ export default function Page() {
               <ul className="space-y-2 text-[#B0D4E3]">
                 <li><a href="#features" className="hover:text-white transition">Features</a></li>
                 <li><a href="#about" className="hover:text-white transition">About</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
+                <li><a href="https://medium.com/@rathiishita1005729/building-rhythma-an-ai-health-companion-for-the-women-indias-forgot-e249ac1cdc9a" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Blog</a></li>
               </ul>
             </div>
             <div>
