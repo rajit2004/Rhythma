@@ -34,25 +34,28 @@ Rhythma aims to be an offline-first, multilingual women's health companion for t
 
 Today, the repository contains:
 
-- A **polished, mostly-static Flutter UI** for five core screens (Home, Cycle, AI Assistant, Insights, Profile) plus Settings, in 5 languages, with light/dark theming.
-- A **working FastAPI backend** with real authentication (JWT + bcrypt) and a Firestore-backed user store.
-- A **directly-integrated Gemini AI assistant** in the Flutter app (calls Google's API straight from the client).
+- A **polished Flutter UI** for five core screens (Home, Cycle, AI Assistant, Insights, Profile) plus Settings, in 5 languages, with light/dark theming — now gated behind real **login/registration**.
+- A **working FastAPI backend** with real authentication (JWT + bcrypt), Firestore-backed users, and Firestore-backed **cycle log persistence**.
+- A real **`/dashboard` endpoint** that reads a user's persisted cycle logs and computes live CVI/MHS scores from them (heuristic model, not yet a trained one).
+- The Flutter **Home screen calls that real `/dashboard` endpoint** — the first place in the app where backend and client are actually connected end-to-end.
+- A **directly-integrated Gemini AI assistant** in the Flutter app (calls Google's API straight from the client) — separate from the backend's own `/assistant` endpoint, which still isn't called by either front end.
 - Local **Hive** storage for profile, settings, and emergency contacts.
-- Scaffolded (not yet trained) **CVI/MHS scoring logic** on the backend.
+- An early **React + Vite web app** (`web/`) with real login/registration against the same backend, protected routing, and i18n — no cycle tracking, insights, or assistant pages yet.
+- **GitHub Actions CI** running Flutter analyze/format/test and backend pytest on every PR.
 - A separate **Next.js marketing landing page**, unrelated to the app's functionality.
 
-Several pieces (cloud sync, on-device encryption, cycle-log persistence, SMS delivery from the app, WhatsApp access, first-period onboarding, Ayurvedic content) are **not yet functional** — see [Implemented Features](#implemented-features) vs. [Features In Progress](#features-in-progress) vs. [Future Features](#future-features) below for the exact line.
+Several pieces (the Cycle screen actually saving what a user logs, cloud sync, on-device encryption, SMS delivery from the app, WhatsApp access, first-period onboarding, Ayurvedic content) are **not yet functional** — see [Implemented Features](#implemented-features) vs. [Features In Progress](#features-in-progress) vs. [Future Features](#future-features) below for the exact line.
 
 ---
 
 ## Platforms
 
-Rhythma is planned as **two front ends sharing one backend**, not two separate products:
+Rhythma consists of **two front ends sharing one backend**, not two separate products:
 
 1. **Flutter mobile app** (`rhythma_flutter/`) — the primary experience today. Most of the UI described in this README lives here.
-2. **Website** — a planned browser-based client with **the same features as the app** (cycle tracking, AI Assistant, Insights, Profile), talking to the same FastAPI backend, for women who don't have or don't want to install a mobile app.
+2. **Website** (`web/`) — a browser-based client aiming for **the same features as the app** (cycle tracking, AI Assistant, Insights, Profile), talking to the same FastAPI backend, for women who don't have or don't want to install a mobile app. **Scaffolding has started**: a React + Vite + TypeScript app with working registration, login, protected routing, and i18n (same 5 locales as Flutter) against the real backend `/auth` endpoints — but it only has a placeholder home page so far. Cycle tracking, AI Assistant, and Insights pages don't exist on the web yet.
 
-**This does not exist yet.** The only web-facing thing in the repo today is `landing-page/`, a Next.js **marketing** site — it explains the product, it does not run any of the product's functionality (no login, no cycle tracking, no AI assistant). Don't confuse the two when navigating the codebase. Building the real web app is tracked under [Future Features](#future-features) and [Roadmap Phase 6](#phase-6--platform-expansion); it will need the backend integration work in Phases 1–2 to land first, since the website would consume the same `/auth`, `/cycle`, `/insights`, and `/assistant` endpoints the Flutter app is only partway through using.
+This is separate from `landing-page/`, a Next.js **marketing** site that explains the product but runs none of its functionality. Don't confuse the two when navigating the codebase. Bringing the website to feature parity is tracked under [Roadmap Phase 6](#phase-6--platform-expansion).
 
 ---
 
@@ -89,19 +92,20 @@ Contributors working on onboarding flows, content, or accessibility should keep 
 
 | Feature | Description | Status |
 | --- | --- | --- |
-| 🌸 **Smart Cycle Tracking** | Handles irregular cycles. No fixed 28-day assumption. Tracks flow, mood, and daily symptoms. | ⚠️ UI only — see [status](#features-in-progress) |
+| 🔐 **Account Login / Registration** | JWT-based sign up and sign in, gating access to the app. | ✅ Implemented (backend + Flutter + web) |
+| 🌸 **Smart Cycle Tracking** | Handles irregular cycles. No fixed 28-day assumption. Tracks flow, mood, and daily symptoms. | ⚠️ Logging UI built (calendar + bottom sheet), but entries aren't saved anywhere yet — see [status](#features-in-progress) |
 | 🤖 **Gemini-Powered AI Assistant** | Multilingual health education and wellness guidance in Hindi, Marathi, Tamil, English, and more. | ✅ Implemented (client-side) |
-| 📊 **Cycle Variability Index™ (CVI)** | Proprietary 0–100 score quantifying hormonal instability over rolling 6–12 months. | ⚠️ Logic exists, not trained, not wired to UI |
-| ❤️ **Menstrual Health Score™ (MHS)** | Holistic composite score: CVI + lifestyle + sleep + stress + symptoms. | ⚠️ Logic exists, not trained, not wired to UI |
-| 🏥 **Hormonal Risk Indicator** | 3-tier alert system (Low / Medium / High) based on cycle gaps and symptom clusters. (Awareness tool, not a diagnosis.) | ⚠️ Backend logic only |
+| 📊 **Cycle Variability Index™ (CVI)** | Proprietary 0–100 score quantifying hormonal instability over rolling 6–12 months. | ⚠️ Heuristic model computed live by the backend `/dashboard` endpoint from persisted logs; shown on the Flutter Home screen but not yet on the Insights screen, and not yet trained on real data |
+| ❤️ **Menstrual Health Score™ (MHS)** | Holistic composite score: CVI + lifestyle + sleep + stress + symptoms. | ⚠️ Same as CVI above — live heuristic via `/dashboard`, surfaced on Home only |
+| 🏥 **Hormonal Risk Indicator** | 3-tier alert system (Low / Medium / High) based on cycle gaps and symptom clusters. (Awareness tool, not a diagnosis.) | ⚠️ Risk level computed by `/dashboard`; not yet surfaced with its own UI treatment |
 | 📱 **Offline-First Architecture** | Hive local storage → Firestore cloud sync when connectivity is available. | ⚠️ Local storage done; sync stubbed |
 | 🔒 **Privacy-First Design** | On-device encryption. No data leaves the phone without explicit user consent. | ❌ Not implemented |
-| 🌍 **Indian Regional Languages** | Full UI localization across Indian languages. | ✅ Implemented (English, Hindi, Marathi, Tamil, Telugu) |
+| 🌍 **Indian Regional Languages** | Full UI localization across Indian languages. | ✅ Implemented (English, Hindi, Marathi, Tamil, Telugu) in Flutter and web |
 | 📩 **SMS Health Summaries** | Weekly summaries via Twilio SMS for users in low-data areas. | ⚠️ Backend done; not linked in app |
 | 🩸 **First Period Guidance** | A dedicated, age-appropriate onboarding and education flow for first-time users (ages 12–17) — separate tone, content, and simplicity level from the adult cycle-tracking experience. | ❌ Not implemented — see [Future Features](#future-features) |
 | 🌿 **Ayurvedic Correlation Layer** | Educational wellness insights that connect lifestyle and cycle patterns with traditional Ayurvedic wellness concepts, for cultural relevance (educational only, not medical advice). | ❌ Not implemented — see [Future Features](#future-features) |
 | 💬 **WhatsApp Bot Integration** | Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) for cycle tracking and health Q&A without requiring an app install — aimed at community/self-help-group users on shared or low-end devices. | ❌ Not implemented — see [Future Features](#future-features) |
-| 🌐 **Website (feature parity)** | A browser-based client offering the same cycle tracking, AI Assistant, Insights, and Profile features as the Flutter app, on the same backend. | ❌ Not implemented — see [Platforms](#platforms) |
+| 🌐 **Website (feature parity)** | A browser-based client offering the same cycle tracking, AI Assistant, Insights, and Profile features as the Flutter app, on the same backend. | ⚠️ Scaffolded — login/register/routing/i18n work; no product pages yet, see [Platforms](#platforms) |
 
 ---
 
@@ -110,31 +114,39 @@ Contributors working on onboarding flows, content, or accessibility should keep 
 These exist in the code today and function as described:
 
 - **Backend authentication** — registration and login with bcrypt password hashing and JWT issuance (`backend/core/auth.py`, `backend/core/auth_router.py`). Protected routes verify the token via `get_current_user`.
+- **In-app authentication (Flutter)** — real login and registration screens (`screens/auth/`) calling the backend, JWT stored via `flutter_secure_storage`, and a session-validation check on app start that routes to `LoginScreen` when there's no valid token. The app no longer opens straight into the main UI.
+- **In-app authentication (web)** — the same login/registration flow, reimplemented in React (`web/src/auth/`), with an Axios interceptor that attaches the token and redirects to `/login` on a 401.
+- **Cycle log persistence (backend)** — `POST /cycle/log` writes real documents to a Firestore `cycle_logs` collection, and `GET /cycle/{user_id}/history` reads them back (`services/firestore_service.py::CycleService`).
+- **Live dashboard scoring (backend)** — `GET /dashboard` pulls a user's persisted cycle logs, derives cycle-length/flow/symptom features, and returns real CVI/MHS/risk-level output plus a `hasEnoughDataForInsights` flag rather than static placeholders (`backend/api/dashboard.py`).
+- **Home screen ↔ backend integration (Flutter)** — the Home screen calls `GET /dashboard` on load and renders whatever it gets back (cycle day, next-period estimate, MHS, CVI risk level, average sleep), including a real error state if the call fails.
 - **AI Assistant (client-side)** — the Flutter app talks directly to the Gemini API (`gemini_service.dart`) with a system prompt tuned for menstrual health guidance, graceful fallback text when no API key is configured, and multi-turn chat history.
 - **Local storage (Hive)** — user profile, app settings, and emergency contacts are saved and loaded from on-device Hive boxes (`local_storage_service.dart`). This data persists across app restarts.
 - **Profile management** — full create/edit flow with input validation (name, age, cycle length), backed by Hive.
 - **Emergency contacts** — full add/edit/delete flow with phone number validation, backed by Hive.
 - **Local notifications** — permission requests, scheduled reminders, and instant test notifications via `flutter_local_notifications` (`notification_service.dart`), wired to toggles in Settings.
 - **Theming** — light/dark mode and a selectable accent color, persisted to Hive and applied app-wide via `ThemeProvider`.
-- **Localization** — full UI translation into English, Hindi, Marathi, Tamil, and Telugu (~125 keys each), switchable in-app and persisted.
+- **Localization** — full UI translation into English, Hindi, Marathi, Tamil, and Telugu (~125 keys each) in Flutter, switchable in-app and persisted; the same 5 locales exist in the web app via i18next.
 - **Settings screen** — notification toggles, language/theme navigation, permission shortcuts, and a logout confirmation flow.
+- **Website scaffold** — a React + Vite + TypeScript app (`web/`) with working registration and login against the real backend, protected routes (`ProtectedRoute.tsx`), and an Axios client that mirrors the Flutter app's token-refresh/401 handling.
 - **Backend health/CORS/router scaffolding** — a real FastAPI app with a lifespan hook, CORS middleware, and modular routers.
-- **Backend Firestore integration (users only)** — real create/read/update operations against a Firestore `users` collection.
-- **Backend tests** — 4 passing `pytest` tests covering login success/failure, protected-route rejection, and SMS rate limiting, with Gemini mocked out.
+- **Backend Firestore integration (users and cycle logs)** — real create/read/update operations against Firestore `users` and `cycle_logs` collections.
+- **CI/CD** — GitHub Actions workflows (`.github/workflows/flutter.yml`, `backend.yml`) run Flutter analyze/format/test and backend `pytest` on every PR and push to `main`.
+- **Backend tests** — 9 passing `pytest` tests covering login success/failure, protected-route rejection, and SMS rate limiting, with Gemini mocked out.
+- **Flutter tests** — a widget test suite plus dedicated tests for onboarding (`onboarding_test.dart`) and the cycle calendar grid (`widgets/calendar_grid_test.dart`).
 
 ### Features In Progress
 
 These have partial code, UI, or backend logic, but are **not end-to-end functional**:
 
-- **Cycle tracking** — the calendar UI exists (`cycle_screen.dart`), but it currently renders hardcoded state; nothing the user taps is saved. The Hive methods to persist cycle logs already exist but aren't yet called from this screen.
-- **Symptoms / mood / sleep / stress logging** — the backend data model (`CycleLog`) supports these fields, but no Flutter screen currently collects them.
-- **Cycle history** — a `GET /cycle/{user_id}/history` endpoint exists but returns an empty, hardcoded list; there's no database read behind it yet.
-- **Health Insights (CVI / MHS)** — the scoring math exists on the backend (`cvi_model.py`, `mhs_model.py`) with a heuristic fallback (no trained model file is committed yet), but the Insights screen in Flutter currently shows static UI, not real scores from these endpoints.
-- **AI Assistant (backend endpoint)** — a fully built `/assistant/chat` FastAPI endpoint exists (with the same system prompt design), but the Flutter app does not call it yet; it currently talks to Gemini directly instead. One of these two paths will be deprecated as the architecture consolidates.
+- **Cycle tracking** — a daily-logging bottom sheet and calendar interactions were built (`cycle_screen.dart`, `cycle_provider.dart`), so the UI now feels interactive. But `CycleProvider` still tracks logged days in an in-memory `Set` seeded with mock entries — nothing the user taps calls Hive **or** the backend's working `POST /cycle/log` endpoint. This is the main gap blocking real end-to-end data: the backend can persist and score logs, and the Home screen can display scores, but nothing currently writes a real log to get scored.
+- **Symptoms / mood / sleep / stress logging** — the backend data model (`CycleLog`) supports these fields, and `/dashboard` will use them once logs exist, but no Flutter screen currently collects and submits them.
+- **Health Insights (CVI / MHS) screen** — the scoring math is live on the backend and already consumed by the Home screen (see [Implemented Features](#implemented-features)), but the dedicated Insights screen in Flutter still shows static UI and doesn't call `/dashboard` or `/insights/{user_id}/scores` itself.
+- **`/insights/{user_id}/scores` endpoint** — still a stub that returns a placeholder message; real scoring now lives in `/dashboard` instead. This older endpoint should probably be removed or redirected once the Insights screen is wired up, rather than maintained in parallel.
+- **AI Assistant (backend endpoint)** — a fully built `/assistant/chat` FastAPI endpoint exists (with the same system prompt design), but neither the Flutter app nor the web app calls it yet; Flutter talks to Gemini directly instead. One of these two paths will be deprecated as the architecture consolidates.
 - **SMS summaries** — the backend has a real Twilio integration with rate limiting, and Flutter has a complete `SmsScreen` UI, but the screen isn't yet linked into app navigation and doesn't yet call the backend endpoint.
-- **In-app authentication** — the backend fully supports register/login, but the Flutter app has no login, registration, or session UI yet; it opens directly into the main app.
+- **Website product pages** — auth works end-to-end on the web app, but there's no cycle tracking, AI Assistant, or Insights page yet — only a placeholder `HomePage.tsx` behind the protected route.
 - **Cloud sync (Firestore, client-side)** — `firestore_service.dart` on the Flutter side is currently a stub with the real Firestore calls commented out pending Firebase client setup.
-- **Testing (Flutter)** — a widget test suite exists, but part of it currently expects UI text that doesn't match the current Settings screen and needs to be reconciled with the code.
+- **Testing (Flutter)** — the suite now covers onboarding and the cycle calendar grid in addition to the original widget test, but hasn't been extended to cover the new auth screens or the daily-logging bottom sheet yet.
 
 ### Future Features
 
@@ -143,7 +155,7 @@ These are on the roadmap but have **no implementation yet** — no code, no cont
 - **First Period Guidance** — a separate onboarding path and education content for girls aged 12–17 experiencing their first period. Needs its own tone, simplified UI, and content review (likely with input from a health educator) before implementation. Nothing exists in the codebase yet — no screen, no content, no data model changes.
 - **Ayurvedic Correlation Layer** — educational content connecting lifestyle and cycle patterns to traditional Ayurvedic wellness concepts. Requires sourcing and reviewing culturally accurate, non-prescriptive content, plus a lightweight rules layer to surface it contextually. No content or code exists yet.
 - **WhatsApp Bot Integration** — a Gemini-powered WhatsApp assistant (via Twilio/Meta Cloud API) offering cycle tracking and health Q&A without an app install, aimed at community/self-help-group users and shared/low-end devices. Depends on the backend `/assistant/chat` endpoint being production-ready first (see [Features In Progress](#features-in-progress)).
-- **Website (feature parity)** — a second, browser-based client offering the same core features as the Flutter app (see [Platforms](#platforms)), built against the same backend endpoints. Distinct from the existing `landing-page/` marketing site, which has no product functionality. No code exists yet.
+- **Website product pages** — cycle tracking, AI Assistant, and Insights pages for the web app (see [Platforms](#platforms)). Auth and routing are already in place; these pages themselves don't exist yet.
 - End-to-end offline-first sync with conflict resolution and a visible sync-status indicator
 - On-device encryption for locally stored health data
 - Connectivity-aware sync (detecting online/offline state)
@@ -152,7 +164,7 @@ These are on the roadmap but have **no implementation yet** — no code, no cont
 - A trained CVI/MHS model (current logic runs on a heuristic, not a trained model)
 - Verified healthcare-provider directory / connect feature
 - Regional, anonymized health-trend insights
-- CI/CD pipelines and an automated release process
+- Automated release process (CI already runs analyze/format/test on every PR — see [Implemented Features](#implemented-features))
 - Accessibility support (screen reader labels, semantic markup)
 
 ---
@@ -161,36 +173,40 @@ These are on the roadmap but have **no implementation yet** — no code, no cont
 
 | Layer | Technology | Status | Why |
 | --- | --- | --- | --- |
-| Mobile app | **Flutter** | Implemented (UI) | Single codebase across Android/iOS |
-| Website (planned product client) | Not yet chosen | Not implemented | Will consume the same backend as the Flutter app; not to be confused with the Next.js marketing site below |
+| Mobile app | **Flutter** | Implemented (UI + auth + partial backend integration) | Single codebase across Android/iOS |
+| Website (planned product client) | **React + Vite + TypeScript** | Scaffolded — auth/routing/i18n done, no product pages yet | Consumes the same backend as the Flutter app; not to be confused with the Next.js marketing site below |
 | Marketing landing page | **Next.js** | Implemented | Public-facing site explaining the product; no app functionality |
 | Backend | **FastAPI** | Implemented | Lightweight async Python API layer |
-| Auth | **JWT + bcrypt** | Implemented (backend only) | Stateless, standard token auth |
-| Cloud database | **Firebase / Firestore** | Implemented for user accounts only; not yet used for health data | Managed NoSQL store, pairs with Firebase Auth long-term |
+| Auth | **JWT + bcrypt** | Implemented (backend, Flutter, and web) | Stateless, standard token auth |
+| Cloud database | **Firebase / Firestore** | Implemented for user accounts and cycle logs; not yet used for any other health data | Managed NoSQL store, pairs with Firebase Auth long-term |
 | Local storage | **Hive** | Implemented | Fast, dependency-light on-device storage for offline access |
 | AI assistant | **Google Gemini API** | Implemented (called directly from Flutter) | Strong multilingual generation for Indian languages |
 | State management | **Provider** | Implemented | Simple, sufficient reactivity for theme/locale |
 | Notifications | **flutter_local_notifications** | Implemented | Local reminder scheduling without a push backend |
-| Localization | **Flutter intl / ARB files** | Implemented | Native Flutter i18n tooling |
+| Localization | **Flutter intl / ARB files** (mobile), **i18next** (web) | Implemented | Native i18n tooling per platform |
 | Charts | Custom `CustomPainter` | Implemented (basic) | `fl_chart` is a listed dependency but not yet used |
 | SMS | **Twilio** | Implemented on backend; not connected to the app UI yet | Reaches users without reliable data connectivity |
 | WhatsApp messaging | **Twilio / Meta Cloud API (planned)** | Not implemented | Needed for the planned WhatsApp bot |
-| ML scoring | **XGBoost / Logistic Regression (planned), heuristic fallback (current)** | Partially implemented | Efficient, interpretable scoring approach once trained |
-| Routing | Manual `IndexedStack` / `Navigator` | Implemented | `go_router` is a listed dependency but not yet used |
-| Encryption | — | Not implemented | `encrypt` / `flutter_secure_storage` are listed dependencies but unused |
+| ML scoring | **XGBoost / Logistic Regression (planned), heuristic fallback (current)** | Partially implemented — heuristic version is live behind `/dashboard` | Efficient, interpretable scoring approach once trained |
+| Routing | Manual `IndexedStack` / `Navigator` (Flutter), `react-router-dom` (web) | Implemented | `go_router` is a listed Flutter dependency but not yet used |
+| CI/CD | **GitHub Actions** | Implemented | Runs Flutter analyze/format/test and backend `pytest` on every PR/push to `main` |
+| Encryption | — | Not implemented | `encrypt` / `flutter_secure_storage` are listed dependencies; `flutter_secure_storage` is now used for the JWT, the rest is unused |
 | Connectivity detection | — | Not implemented | `connectivity_plus` is a listed dependency but unused |
 
 ---
 
 ## Architecture
 
-Rhythma currently consists of two independently runnable pieces that are **not yet fully connected**:
+Rhythma currently consists of two independently runnable pieces that are **partly connected**:
 
 ```
 ┌──────────────────────────────────────────────┐
 │                 Flutter App                   │
 │                                                │
+│  Login/Register ──► /auth (real, gates entry) │
+│                                                │
 │  Home · Cycle · Assistant · Insights · Profile│
+│  Home screen ──► GET /dashboard (real scores) │
 │                                                │
 │  ┌──────────────────────────────────────┐     │
 │  │  Hive (local, on-device)              │     │
@@ -199,24 +215,30 @@ Rhythma currently consists of two independently runnable pieces that are **not y
 │  │    but no screen writes to it yet     │     │
 │  └──────────────────────────────────────┘     │
 │                                                │
+│  Cycle screen ──X no persistence (mock state) │
 │  Gemini API ◄── called directly for AI chat   │
 └──────────────────────────────────────────────┘
 
-┌──────────────────────────────────────────────┐          ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
-│               FastAPI Backend                 │◄─────────  Website (planned, no code   
-│                                                │          │  yet) — same feature set as   
-│  /auth      → real JWT auth, Firestore users  │           the Flutter app, same backend │
-│  /assistant → real Gemini call (unused by app)│          └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
-│  /cycle     → stub, returns empty/static data │
-│  /insights  → stub, returns static data       │
+┌──────────────────────────────────────────────┐          ┌────────────────────────────────┐
+│               FastAPI Backend                 │◄─────────  Website (web/, React)          
+│                                                │          │  Login/Register ──► /auth (real)│
+│  /auth      → real JWT auth, Firestore users  │          │  No other pages yet             │
+│  /assistant → real Gemini call (unused by     │          └────────────────────────────────┘
+│               either front end)               │
+│  /cycle     → POST /log persists to Firestore;│
+│               GET history reads real logs     │
+│  /dashboard → real CVI/MHS/risk, computed      │
+│               live from persisted cycle logs  │
+│  /insights  → older stub, superseded by        │
+│               /dashboard, not yet removed      │
 │  /sms       → real Twilio integration         │
 │  /health    → basic health check              │
 └──────────────────────────────────────────────┘
 ```
 
-The Flutter app and FastAPI backend do not currently share data — the app works entirely off local Hive storage and a direct Gemini connection, while the backend's auth, cycle, insights, and assistant endpoints are functional in isolation but are not yet called by the client.
+The Flutter app's Home screen and both front ends' login/registration are the only points where a client currently talks to the backend — everything else in Flutter still runs off local Hive storage and a direct Gemini connection. In practice this means `/dashboard` almost always reports "not enough data yet," because the one endpoint that would give it real data to score (`POST /cycle/log`) isn't called by anything yet — closing that gap is the single highest-leverage next step (see [Project Status](#project-status)).
 
-There is no WhatsApp, first-period, Ayurvedic-content, or website layer in this architecture yet — they would each attach to the backend (`/assistant` for WhatsApp; new endpoints/content sources for first-period and Ayurvedic content; the full existing `/auth`, `/cycle`, `/insights`, `/assistant` set for the planned website). The dashed box above marks the one piece of this diagram that is a plan, not running code — see [Platforms](#platforms).
+There is no WhatsApp, first-period, or Ayurvedic-content layer in this architecture yet — they would each attach to the backend (`/assistant` for WhatsApp; new endpoints/content sources for first-period and Ayurvedic content).
 
 ---
 
@@ -224,12 +246,19 @@ There is no WhatsApp, first-period, Ayurvedic-content, or website layer in this 
 
 ```
 Rhythma/
+├── .github/workflows/              GitHub Actions CI
+│   ├── flutter.yml                 Analyze, format, test (on rhythma_flutter/ changes)
+│   └── backend.yml                 pytest (on backend/ changes)
+│
 ├── backend/                       FastAPI backend
 │   ├── api/
-│   │   ├── assistant.py           Gemini chat endpoint (not yet used by the app)
-│   │   ├── cycle.py                Cycle log endpoints (stubbed persistence)
+│   │   ├── assistant.py           Gemini chat endpoint (not yet used by either front end)
+│   │   ├── cycle.py                Cycle log endpoints — POST /log and GET history are real,
+│   │   │                           persist to and read from Firestore
+│   │   ├── dashboard.py            GET /dashboard — real CVI/MHS/risk computed live from a
+│   │   │                           user's persisted cycle logs; called by the Flutter Home screen
 │   │   ├── health.py               Health check
-│   │   ├── insights.py             Score endpoint (stubbed)
+│   │   ├── insights.py             Older GET /{user_id}/scores stub, superseded by /dashboard
 │   │   └── sms.py                  Twilio SMS endpoint (real, rate-limited)
 │   ├── core/
 │   │   ├── auth.py                 JWT + password hashing
@@ -239,35 +268,45 @@ Rhythma/
 │   │   ├── mhs_model.py            Menstrual Health Score scoring
 │   │   └── user.py                 Pydantic user schemas
 │   ├── services/
-│   │   └── firestore_service.py    Firestore user CRUD
+│   │   └── firestore_service.py    Firestore user CRUD + CycleService (real cycle log CRUD)
 │   ├── tests/
-│   │   └── test_auth.py            Backend test suite
+│   │   └── test_auth.py            Backend test suite (9 tests)
 │   ├── utils/logger.py
 │   ├── main.py                     App entrypoint, router registration
 │   └── .env.example
 │
 ├── rhythma_flutter/                Flutter application
 │   ├── lib/
-│   │   ├── main.dart
+│   │   ├── main.dart                Checks session on start; routes to LoginScreen or the app
 │   │   ├── config/theme.dart
 │   │   ├── components/             bottom_nav, charts, shared widgets
-│   │   ├── providers/              theme_provider, locale_provider
-│   │   ├── services/               local_storage_service, gemini_service,
+│   │   ├── providers/              theme_provider, locale_provider, cycle_provider (mock state)
+│   │   ├── services/               api_client, auth_service, assistant_service,
+│   │   │                           local_storage_service, gemini_service,
 │   │   │                           firestore_service (stub), notification_service
 │   │   ├── screens/
-│   │   │   ├── home/, cycle/, assistant/, insights/, profile/
+│   │   │   ├── auth/               login_screen, register_screen (real, calls backend)
+│   │   │   ├── home/               calls GET /dashboard for real cycle/insight data
+│   │   │   ├── cycle/, assistant/, insights/, profile/
 │   │   │   ├── settings/           settings, language, theme
 │   │   │   └── sms/                built but not yet linked into navigation
 │   │   └── l10n/                   en, hi, mr, ta, te translations
-│   ├── test/widget_test.dart
+│   ├── test/                       widget_test, onboarding_test, widgets/calendar_grid_test
 │   ├── env.example
 │   └── pubspec.yaml
 │   *(Note: `android/` and `ios/` platform folders are not committed; run
 │   `flutter create .` before building for a device.)*
 │
+├── web/                            React + Vite + TypeScript web app (early scaffold)
+│   ├── src/
+│   │   ├── auth/                   AuthContext, ProtectedRoute (real, calls backend)
+│   │   ├── api/client.ts           Axios client mirroring api_client.dart's token/401 handling
+│   │   ├── i18n/locales/           en, hi, mr, ta, te
+│   │   └── pages/                  LoginPage, RegisterPage (real), HomePage (placeholder only)
+│   └── .env.example
+│
 ├── landing-page/                   Standalone Next.js marketing site (Vercel) —
 │                                    NOT the planned product website; see "Platforms"
-│                                    (no product website folder exists yet)
 ├── docs/architecture.md            System design notes (describes target architecture)
 ├── design-concepts/                UI demo videos
 ├── screenshots/
@@ -285,6 +324,7 @@ Rhythma/
 
 - Flutter SDK 3.x
 - Python 3.10+
+- Node.js 18+ (only if you're working on `web/`)
 - Git
 - A Firebase project (for backend user storage)
 - A Gemini API key ([get one here](https://ai.google.dev))
@@ -337,6 +377,21 @@ cd backend
 pytest
 ```
 
+### Running the Web App
+
+```
+cd web
+cp .env.example .env.local
+# VITE_API_BASE_URL defaults to http://localhost:8000/api/v1, adjust if needed
+
+npm install
+npm run dev
+```
+
+This gets you a working registration/login flow and a placeholder home page — there's no cycle tracking, AI Assistant, or Insights page here yet (see [Platforms](#platforms)).
+
+> **Note:** Both the Flutter app and the web app now require a real account. Register through either front end's Register screen against a running backend before you'll see anything past the login screen.
+
 ---
 
 ## Configuration
@@ -358,6 +413,14 @@ pytest
 | --- | --- | --- |
 | `GEMINI_API_KEY` | Optional | Enables real AI responses in the Assistant tab; without it, a demo fallback response is shown |
 
+**Web (`web/.env.local`)**
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | No — defaults to `http://localhost:8000/api/v1` | Backend base URL the web app calls for `/auth`, etc. Vite only exposes `VITE_`-prefixed vars to client code. |
+
+The backend's CORS config already whitelists the Vite dev server (`http://localhost:5173`) alongside `localhost:8000`/`localhost:3000`, so a default local setup works without touching `main.py`.
+
 ### Firebase Setup
 
 The backend currently uses Firebase **only for user accounts** (via the Admin SDK). To set it up:
@@ -376,29 +439,32 @@ The backend currently uses Firebase **only for user accounts** (via the Admin SD
 | Area | Status |
 | --- | --- |
 | Flutter UI (screens, theming, localization) | ✅ Largely complete |
+| In-app authentication (Flutter + web + backend) | ✅ Complete |
 | Local storage (profile, settings, contacts) | ✅ Complete |
 | Local notifications | ✅ Complete |
 | Backend authentication (JWT/bcrypt) | ✅ Complete |
 | Backend Firestore (user accounts) | ✅ Complete |
+| Backend cycle log persistence (Firestore) | ✅ Complete |
+| Backend `/dashboard` (live CVI/MHS/risk from real logs) | ✅ Complete |
+| Home screen ↔ backend integration | ✅ Functional — but see cycle logging row below for why it's usually empty |
 | AI Assistant (client → Gemini directly) | ✅ Functional |
-| AI Assistant (backend endpoint) | ⚠️ Built, unused |
-| Cycle tracking (persistence) | ❌ UI only, not wired |
-| Cycle/insights backend endpoints | ⚠️ Stubbed, no persistence |
-| CVI / MHS scoring | ⚠️ Logic exists, no trained model, not called from the app |
+| AI Assistant (backend endpoint) | ⚠️ Built, unused by either front end |
+| Cycle tracking (persistence) | ❌ Logging UI built, but writes to neither Hive nor the backend — **the current top-priority gap** |
+| Cycle/insights backend endpoints | ⚠️ `/cycle` is real; older `/insights/{user_id}/scores` is a stub superseded by `/dashboard` |
+| CVI / MHS scoring | ⚠️ Heuristic logic live via `/dashboard`; no trained model yet; not yet surfaced on the Insights screen |
 | SMS (Twilio) | ⚠️ Backend done; app UI built but unlinked |
 | Cloud sync (Flutter ↔ Firestore) | ❌ Stubbed only |
 | Encryption at rest | ❌ Not implemented |
 | Connectivity detection | ❌ Not implemented |
-| In-app authentication | ❌ Not implemented |
+| Website (`web/`) | ⚠️ Scaffolded — auth, routing, and i18n work; no cycle/insights/assistant pages yet |
 | First Period Guidance | ❌ Not implemented — no design, content, or code yet |
 | Ayurvedic Correlation Layer | ❌ Not implemented — no content or code yet |
 | WhatsApp Bot Integration | ❌ Not implemented — depends on backend assistant endpoint going live first |
-| Website (feature parity with the app) | ❌ Not implemented — no framework chosen, no code; not to be confused with the existing marketing `landing-page/` |
-| Testing | ⚠️ Basic backend suite passing; Flutter suite needs reconciliation with current UI |
-| CI/CD | ❌ Not set up |
+| Testing | ⚠️ 9 backend tests passing; Flutter suite covers onboarding + calendar grid but not yet the new auth screens; web app has no tests |
+| CI/CD | ✅ GitHub Actions run Flutter analyze/format/test and backend pytest on every PR |
 | Deployment | ⚠️ Landing page only (Vercel) |
 
-**In short:** the Flutter UI and the FastAPI backend are each independently further along than the app is as an integrated whole. The immediate priority is wiring the two together and making cycle tracking actually persist data. First Period Guidance, the Ayurvedic layer, and the WhatsApp bot are all clean-slate features with no existing code — good candidates for contributors who want to own something end-to-end, but each needs a scoping discussion first (see [CONTRIBUTING.md](./CONTRIBUTING.md)).
+**In short:** the Flutter UI, the FastAPI backend, and now a real auth-and-dashboard connection between them are each further along than before, but cycle logging — the one action that would make the rest of the pipeline meaningful — still doesn't persist anywhere. Wiring the daily-logging bottom sheet to Hive and/or `POST /cycle/log` is the single highest-leverage next task; everything downstream of it (`/dashboard`, CVI/MHS, the Insights screen) is already built and waiting for real data. First Period Guidance, the Ayurvedic layer, the WhatsApp bot, and the website's product pages are all clean-slate or near-clean-slate feature areas — good candidates for contributors who want to own something end-to-end, but each needs a scoping discussion first (see [CONTRIBUTING.md](./CONTRIBUTING.md)).
 
 ---
 
@@ -407,16 +473,17 @@ The backend currently uses Firebase **only for user accounts** (via the Admin SD
 ### Phase 1 — Make it functional end-to-end
 
 - Generate missing Flutter platform folders (`android/`, `ios/`)
-- Wire the Cycle screen to Hive persistence
-- Reconcile the Flutter test suite with the current Settings UI
+- **Wire the Cycle screen's daily-logging bottom sheet to Hive and/or `POST /cycle/log`** — the top remaining item in this phase; everything downstream (`/dashboard`, CVI/MHS, Insights) is already built and waiting on this
+- Reconcile the Flutter test suite with the new auth screens and daily-logging UI
 - Link the built `SmsScreen` into app navigation
 
 ### Phase 2 — Connect frontend and backend
 
-- Build in-app login/registration against the existing backend auth
-- Persist cycle logs through the backend `/cycle` endpoints
+- ~~Build in-app login/registration against the existing backend auth~~ ✅ Done (Flutter and web)
+- ~~Persist cycle logs through the backend `/cycle` endpoints~~ ✅ Backend side done — Flutter still needs to call it (see Phase 1)
 - Decide on a single Gemini integration path (client-direct vs. backend-proxied) and remove the other
-- Connect the Insights screen to real CVI/MHS scores
+- Connect the dedicated Insights screen to `/dashboard` (Home screen already does this)
+- Retire or redirect the older `/insights/{user_id}/scores` stub now that `/dashboard` exists
 
 ### Phase 3 — Offline-first & privacy
 
@@ -437,9 +504,9 @@ The backend currently uses Firebase **only for user accounts** (via the Admin SD
 
 ### Phase 6 — Platform expansion
 
-- **Website with feature parity**: a new, separate front end (framework not yet decided) covering cycle tracking, AI Assistant, Insights, and Profile against the same backend the Flutter app uses — not an extension of the existing `landing-page/` marketing site. See [Platforms](#platforms).
+- **Website with feature parity**: build cycle tracking, AI Assistant, Insights, and Profile pages on top of the existing `web/` auth scaffold — see [Platforms](#platforms)
 - **WhatsApp-based assistant access**, built on top of the existing (but currently unused) `/assistant/chat` backend endpoint
-- CI/CD, automated releases, and healthcare-provider partnerships
+- Automated releases and healthcare-provider partnerships
 
 ---
 
