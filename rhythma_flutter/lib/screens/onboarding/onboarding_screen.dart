@@ -21,7 +21,7 @@ class OnboardingScreen extends StatefulWidget {
     'assets/avatars/avatar_4.png',
   ];
 
-  const OnboardingScreen({Key? key, required this.onComplete}) : super(key: key);
+  const OnboardingScreen({super.key, required this.onComplete});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -923,7 +923,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: RhythmaColors.primary,
+            activeThumbColor: RhythmaColors.primary,
           ),
         ],
       ),

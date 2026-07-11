@@ -45,7 +45,19 @@
   "homeLearnHormones": "Hormones 101",
   "homeLearnIron": "Iron-rich foods",
   "homeArticle": "ARTICLE",
-  
+  "homeFailedLoad": "Failed to load dashboard",
+  "homeRetry": "Retry",
+  "homeComingSoon": "Coming Soon",
+  "homeUnderDevelopment": "{topic} is currently under development.",
+  "@homeUnderDevelopment": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "homePrivacySecurity": "Privacy & Security",
+  "homeOk": "OK",
   "cycleTrackerTitle": "Cycle Tracker",
   "cyclePhasePeriod": "Period",
   "cyclePhaseFollicular": "Follicular",
@@ -69,6 +81,16 @@
   "logSympAcne": "Acne",
   "logLabelEnergy": "Energy",
   "logLabelSymptoms": "Symptoms",
+  "logToday": "Log Today",
+  "logTitle": "Log your day",
+  "logFlowIntensity": "Flow Intensity",
+  "logMood": "Mood",
+  "logSleepHours": "Sleep Hours",
+  "logStressLevel": "Stress Level",
+  "logSave": "Save Log",
+  "logSympFatigue": "Fatigue",
+  "logSympNausea": "Nausea",
+  "logSympBackPain": "Back Pain",
   
   "assistantTitle": "Rhythma Assistant",
   "assistantSubtitle": "Your private health companion",

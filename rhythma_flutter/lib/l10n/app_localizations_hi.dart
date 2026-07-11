@@ -136,6 +136,26 @@ class AppLocalizationsHi extends AppLocalizations {
   String get homeArticle => 'लेख';
 
   @override
+  String get homeFailedLoad => 'Failed to load dashboard';
+
+  @override
+  String get homeRetry => 'Retry';
+
+  @override
+  String get homeComingSoon => 'Coming Soon';
+
+  @override
+  String homeUnderDevelopment(String topic) {
+    return '$topic is currently under development.';
+  }
+
+  @override
+  String get homePrivacySecurity => 'Privacy & Security';
+
+  @override
+  String get homeOk => 'OK';
+
+  @override
   String get cycleTrackerTitle => 'चक्र ट्रैकर';
 
   @override
@@ -203,6 +223,36 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get logLabelSymptoms => 'लक्षण';
+
+  @override
+  String get logToday => 'Log Today';
+
+  @override
+  String get logTitle => 'Log your day';
+
+  @override
+  String get logFlowIntensity => 'Flow Intensity';
+
+  @override
+  String get logMood => 'Mood';
+
+  @override
+  String get logSleepHours => 'Sleep Hours';
+
+  @override
+  String get logStressLevel => 'Stress Level';
+
+  @override
+  String get logSave => 'Save Log';
+
+  @override
+  String get logSympFatigue => 'Fatigue';
+
+  @override
+  String get logSympNausea => 'Nausea';
+
+  @override
+  String get logSympBackPain => 'Back Pain';
 
   @override
   String get assistantTitle => 'रिद्मा सहायक';

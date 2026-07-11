@@ -58,6 +58,10 @@ class CycleProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshLogs() {
+    notifyListeners();
+  }
+
   // Phase logic
   String phase(DateTime date, AppLocalizations l10n) {
     final day = date.day;

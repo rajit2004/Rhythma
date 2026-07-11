@@ -10,10 +10,10 @@ class RhythmaBottomNav extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   const RhythmaBottomNav({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   List<_NavTab> _getTabs(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

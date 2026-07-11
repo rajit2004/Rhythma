@@ -12,7 +12,7 @@ import 'theme_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -41,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TintedIcon(
+                  const TintedIcon(
                     icon: Icons.logout_rounded,
                     color: RhythmaColors.coral,
                     size: 48,
@@ -155,7 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -163,7 +163,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               backgroundColor: RhythmaColors.primary,
               foregroundColor: RhythmaColors.primaryFg,
             ),
-            child: Text('Confirm'),
+            child: const Text('Confirm'),
           ),
         ],
       ),
@@ -189,7 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           title: Text(l10n.settingsTitle),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new_rounded),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => Navigator.pop(context),
           ),
         ),
@@ -246,14 +246,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Column(
                 children: [
                   SwitchListTile(
-                    secondary: TintedIcon(
+                    secondary: const TintedIcon(
                       icon: Icons.calendar_month_rounded,
                       color: RhythmaColors.rose,
                       size: 36,
                     ),
                     title: Text(l10n.cycleTrackingReminders),
                     value: _cycleTracking,
-                    activeColor: RhythmaColors.primary,
+                    activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
                       bool confirm = await _showConfirmationDialog('Cycle Tracking', 'cycle tracking reminders', value);
                       if (confirm) {
@@ -265,14 +265,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   Divider(height: 1, color: RhythmaColors.border),
                   SwitchListTile(
-                    secondary: TintedIcon(
+                    secondary: const TintedIcon(
                       icon: Icons.medication_rounded,
                       color: RhythmaColors.teal,
                       size: 36,
                     ),
                     title: Text(l10n.medicineAlerts),
                     value: _medicineAlerts,
-                    activeColor: RhythmaColors.primary,
+                    activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
                       bool confirm = await _showConfirmationDialog('Medicine Alerts', 'medicine alerts', value);
                       if (!confirm) return;
@@ -304,14 +304,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   Divider(height: 1, color: RhythmaColors.border),
                   SwitchListTile(
-                    secondary: TintedIcon(
+                    secondary: const TintedIcon(
                       icon: Icons.spa_rounded,
                       color: RhythmaColors.coral,
                       size: 36,
                     ),
                     title: Text(l10n.wellnessTips),
                     value: _wellnessTips,
-                    activeColor: RhythmaColors.primary,
+                    activeThumbColor: RhythmaColors.primary,
                     onChanged: (bool value) async {
                       bool confirm = await _showConfirmationDialog('Wellness Tips', 'wellness tips', value);
                       if (confirm) {
@@ -328,8 +328,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       color: RhythmaColors.primary,
                       size: 36,
                     ),
-                    title: Text('Test Notification Now'),
-                    subtitle: Text('Sends an instant alert'),
+                    title: const Text('Test Notification Now'),
+                    subtitle: const Text('Sends an instant alert'),
                     trailing: Icon(Icons.send_rounded, color: RhythmaColors.mutedFg),
                     onTap: () async {
                       bool granted = await NotificationService.instance.requestPermissions();
@@ -373,7 +373,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             textAlign: TextAlign.center,
                             style: TextStyle(color: RhythmaColors.primary),
                           ),
-                          content: Text(
+                          content: const Text(
                             'This feature is currently under development.',
                             textAlign: TextAlign.center,
                           ),
@@ -385,7 +385,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 foregroundColor: RhythmaColors.primaryFg,
                               ),
                               onPressed: () => Navigator.pop(context),
-                              child: Text('OK'),
+                              child: const Text('OK'),
                             ),
                           ],
                         ),
@@ -413,7 +413,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             textAlign: TextAlign.center,
                             style: TextStyle(color: RhythmaColors.primary),
                           ),
-                          content: Text(
+                          content: const Text(
                             'This feature is currently under development.',
                             textAlign: TextAlign.center,
                           ),
@@ -425,7 +425,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 foregroundColor: RhythmaColors.primaryFg,
                               ),
                               onPressed: () => Navigator.pop(context),
-                              child: Text('OK'),
+                              child: const Text('OK'),
                             ),
                           ],
                         ),
@@ -442,7 +442,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             GlassCard(
               padding: EdgeInsets.zero,
               child: ListTile(
-                leading: TintedIcon(
+                leading: const TintedIcon(
                   icon: Icons.support_agent_rounded,
                   color: RhythmaColors.teal,
                   size: 36,
@@ -474,14 +474,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             GlassCard(
               padding: EdgeInsets.zero,
               child: ListTile(
-                leading: TintedIcon(
+                leading: const TintedIcon(
                   icon: Icons.logout_rounded,
                   color: RhythmaColors.coral,
                   size: 36,
                 ),
                 title: Text(
                   l10n.logOut,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: RhythmaColors.coral,
                     fontWeight: FontWeight.w600,
                   ),

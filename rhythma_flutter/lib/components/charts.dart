@@ -9,11 +9,11 @@ class CycleRing extends StatelessWidget {
   final double size;
 
   const CycleRing({
-    Key? key,
+    super.key,
     required this.day,
     required this.total,
     this.size = 84,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class _RingPainter extends CustomPainter {
         colors: [RhythmaColors.primary, RhythmaColors.rose],
         startAngle: 0,
         endAngle: math.pi * 2,
-        transform: GradientRotation(-math.pi / 2),
+        transform: const GradientRotation(-math.pi / 2),
       ).createShader(rect);
 
     canvas.drawArc(
@@ -107,8 +107,7 @@ class ScoreRing extends StatelessWidget {
   final int value;
   final double size;
 
-  const ScoreRing({Key? key, required this.value, this.size = 96})
-      : super(key: key);
+  const ScoreRing({super.key, required this.value, this.size = 96});
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +156,7 @@ class _ScorePainter extends CustomPainter {
         colors: [RhythmaColors.primary, RhythmaColors.rose],
         startAngle: 0,
         endAngle: math.pi * 2,
-        transform: GradientRotation(-math.pi / 2),
+        transform: const GradientRotation(-math.pi / 2),
       ).createShader(rect);
 
     canvas.drawArc(
@@ -175,11 +174,11 @@ class TrendChart extends StatelessWidget {
   final double height;
 
   const TrendChart({
-    Key? key,
+    super.key,
     required this.points,
     this.color,
     this.height = 80,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../config/theme.dart';
 import '../../../providers/cycle_provider.dart';
+import '../../../services/local_storage_service.dart';
+import 'log_entry_sheet.dart';
 
 class CalendarGrid extends StatefulWidget {
   final PageController pageController;
@@ -76,10 +78,23 @@ class _CalendarGridState extends State<CalendarGrid> {
                 return GestureDetector(
                   onTap: () {
                     context.read<CycleProvider>().selectDate(currentDate);
-                    // Also trigger symptom log toggle in this mock version if they tap twice? 
-                    // Wait, let's keep selecting separate from toggling. They toggle in the bottom UI.
-                    // But the plan says "Tapping a day should open the symptom logging flow or show existing daily data."
-                    // Since the log section is below the calendar, selecting the date naturally shows its data.
+                    
+                    final dateKey = currentDate.toIso8601String().split('T')[0];
+                    final logs = LocalStorageService.getCycleLogs();
+                    final existingLog = logs.cast<Map<String, dynamic>?>().firstWhere(
+                          (log) => log?['start_date'] == dateKey,
+                          orElse: () => null,
+                        );
+
+                    LogEntrySheet.show(
+                      context,
+                      currentDate,
+                      existingLog: existingLog,
+                    ).then((_) {
+                      if (context.mounted) {
+                        context.read<CycleProvider>().refreshLogs();
+                      }
+                    });
                   },
                   child: SizedBox(
                     width: cellWidth,

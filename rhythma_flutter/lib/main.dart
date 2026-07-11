@@ -114,7 +114,7 @@ class RhythmaApp extends StatelessWidget {
 /// Uses a [ValueNotifier] so the onboarding screen can trigger a rebuild
 /// without Navigator push/pop complexity.
 class RhythmaRoot extends StatefulWidget {
-  const RhythmaRoot({Key? key}) : super(key: key);
+  const RhythmaRoot({super.key});
 
   @override
   State<RhythmaRoot> createState() => _RhythmaRootState();
