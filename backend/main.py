@@ -48,6 +48,7 @@ app.add_middleware(
         "http://localhost:3000",  # Your Flutter web (if you ever run it)
         "http://127.0.0.1:8000",
     ],
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

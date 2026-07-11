@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import '../../config/theme.dart';
 import '../../components/shared.dart';
 import '../../services/api_client.dart';
-import '../../utils/secure_storage.dart';
 
 /// SMS Health Summary screen.
 /// Users can configure their phone number to receive weekly
 /// menstrual health summaries via SMS — useful in low-data areas.
 class SmsScreen extends StatefulWidget {
-  const SmsScreen({Key? key}) : super(key: key);
+  const SmsScreen({super.key});
 
   @override
   State<SmsScreen> createState() => _SmsScreenState();
@@ -63,7 +62,7 @@ class _SmsScreenState extends State<SmsScreen> {
     setState(() => _saving = true);
     try {
       final dio = ApiClient.dio;
-      final response = await dio.post(
+      await dio.post(
         '/sms/settings',
         data: {
           'phoneNumber': phone,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:rhythma/l10n/app_localizations.dart';
 import '../../../config/theme.dart';
 import '../../../providers/cycle_provider.dart';
 
@@ -10,10 +8,10 @@ class CalendarGrid extends StatefulWidget {
   final int initialPageOffset;
 
   const CalendarGrid({
-    Key? key,
+    super.key,
     required this.pageController,
     required this.initialPageOffset,
-  }) : super(key: key);
+  });
 
   @override
   State<CalendarGrid> createState() => _CalendarGridState();
@@ -28,8 +26,7 @@ class _CalendarGridState extends State<CalendarGrid> {
   @override
   Widget build(BuildContext context) {
     final cycleProvider = context.watch<CycleProvider>();
-    final l10n = AppLocalizations.of(context)!;
-    
+
     // Calculate cell width based on screen size, similar to before
     final cellWidth = (MediaQuery.of(context).size.width - 40 - 32) / 7;
 
@@ -97,7 +94,7 @@ class _CalendarGridState extends State<CalendarGrid> {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? phaseColor
-                                : phaseColor.withOpacity(0.14),
+                                : phaseColor.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(10),
                             border: isToday && !isSelected
                                 ? Border.all(color: phaseColor, width: 1.4)

@@ -5,14 +5,11 @@ import '../../config/theme.dart';
 import '../../components/shared.dart';
 import '../../components/charts.dart';
 import '../../providers/theme_provider.dart';
-import '../../providers/profile_provider.dart';
 import '../../services/api_client.dart';
 import '../../services/local_storage_service.dart';
-import '../../utils/secure_storage.dart';
 import '../cycle/cycle_screen.dart';
 import '../insights/insights_screen.dart';
 import '../settings/language_screen.dart';
-import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

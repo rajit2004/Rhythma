@@ -33,7 +33,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get cycleTrackingReminders => 'రుతుక్రమ రిమైండర్‌లు';
 
   @override
-  String get medicineAlerts => 'ఔషధ హెచ్చరికలు';
+  String get medicineAlerts => 'మందుల హెచ్చరికలు';
 
   @override
   String get wellnessTips => 'ఆరోగ్య చిట్కాలు';
@@ -76,13 +76,13 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeDaysLabel => 'రోజులు';
 
   @override
-  String get homeFertileWindow => 'సంతానోత్పత్తి విండో · ';
+  String get homeFertileWindow => 'సంతానోత్పత్తి సమయం · ';
 
   @override
   String get homeHighEnergy => 'అధిక శక్తి';
 
   @override
-  String get homeAiTitle => 'రిథ్మా ఏఐ (Rhythma AI)';
+  String get homeAiTitle => 'రిథ్మా ఏఐ';
 
   @override
   String get homeAiSubtitle =>
@@ -95,7 +95,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeFeelingTitle => 'ఈ రోజు మీరు ఎలా భావిస్తున్నారు?';
 
   @override
-  String get homeLogAll => 'అన్నీ లాగ్ చేయండి';
+  String get homeLogAll => 'నమోదు చేయండి';
 
   @override
   String get homeLogFlow => 'ప్రవాహం';
@@ -114,7 +114,7 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get homeWeeklyInsightTitle =>
-      'ఈ వారం మీ నిద్ర 12% మెరుగుపడింది - మీ రుతుక్రమం మీకు కృతజ్ఞతలు చెప్పవచ్చు.';
+      'ఈ వారం మీ నిద్ర 12% మెరుగుపడింది — మీ చక్రం కూడా దీనికి తోడ్పడి ఉండవచ్చు.';
 
   @override
   String get homeWeeklyInsightDesc =>
@@ -124,10 +124,10 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeLearnTitle => 'రిథ్మాతో నేర్చుకోండి';
 
   @override
-  String get homeLearnPcos => 'PCOS అర్థం చేసుకోవడం';
+  String get homeLearnPcos => 'PCOS గురించి తెలుసుకోండి';
 
   @override
-  String get homeLearnHormones => 'హార్మోన్లు 101';
+  String get homeLearnHormones => 'హార్మోన్ల మౌలికాలు';
 
   @override
   String get homeLearnIron => 'ఇనుము అధికంగా ఉండే ఆహారాలు';
@@ -136,22 +136,22 @@ class AppLocalizationsTe extends AppLocalizations {
   String get homeArticle => 'వ్యాసం';
 
   @override
-  String get cycleTrackerTitle => 'సైకిల్ ట్రాకర్';
+  String get cycleTrackerTitle => 'రుతుక్రమ ట్రాకర్';
 
   @override
   String get cyclePhasePeriod => 'రుతుక్రమం';
 
   @override
-  String get cyclePhaseFollicular => 'ఫొలిక్యులర్';
+  String get cyclePhaseFollicular => 'ఫాలిక్యులర్ దశ';
 
   @override
   String get cyclePhaseOvulation => 'అండోత్సర్గం';
 
   @override
-  String get cyclePhaseLuteal => 'లూటియల్';
+  String get cyclePhaseLuteal => 'ల్యూటియల్ దశ';
 
   @override
-  String get logFor => 'లాగ్ చేయండి';
+  String get logFor => 'నమోదు కోసం';
 
   @override
   String get logNone => 'ఏదీ లేదు';
@@ -187,7 +187,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get logSleep4 => '9+ గంటలు';
 
   @override
-  String get logSympCramps => 'నొప్పులు';
+  String get logSympCramps => 'తిమ్మిర్లు';
 
   @override
   String get logSympHeadache => 'తలనొప్పి';
@@ -205,17 +205,17 @@ class AppLocalizationsTe extends AppLocalizations {
   String get logLabelSymptoms => 'లక్షణాలు';
 
   @override
-  String get assistantTitle => 'రిథ్మా సహాయకుడు';
+  String get assistantTitle => 'రిథ్మా సహాయకురాలు';
 
   @override
-  String get assistantSubtitle => 'మీ వ్యక్తిగత ఆరోగ్య సహచరుడు';
+  String get assistantSubtitle => 'మీ వ్యక్తిగత ఆరోగ్య సహచరి';
 
   @override
   String get assistantInputHint => 'మీ ప్రశ్న అడగండి...';
 
   @override
   String get assistantWelcome =>
-      'నమస్తే ఆర్య 🌸 నేను రిథ్మా, మీ వ్యక్తిగత ఆరోగ్య సహచరుడిని. మీ రుతుక్రమం, లక్షణాలు గురించి నన్ను ఏదైనా అడగండి — ఇంగ్లీష్, హిందీ, మరాఠీ లేదా తమిళంలో.';
+      'నమస్తే ఆర్య 🌸 నేను రిథ్మా, మీ వ్యక్తిగత ఆరోగ్య సహచరిని. మీ రుతుక్రమం, లక్షణాల గురించి నన్ను ఏదైనా అడగండి — ఇంగ్లీష్, హిందీ, మరాఠీ లేదా తమిళంలో.';
 
   @override
   String get assistantSug1 => 'నా రుతుక్రమం ఎందుకు క్రమం తప్పింది?';
@@ -227,7 +227,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get assistantSug3 => '35 రోజుల చక్రం సాధారణమేనా?';
 
   @override
-  String get assistantSug4 => 'PMS కు సహాయపడే ఆహారాలు';
+  String get assistantSug4 => 'PMS లక్షణాలకు సహాయపడే ఆహారాలు';
 
   @override
   String get assistantSug5 => 'నా రుతుక్రమం క్రమం తప్పింది — ఇది సాధారణమేనా?';
@@ -242,10 +242,10 @@ class AppLocalizationsTe extends AppLocalizations {
   String get insightsMhsLabel => 'రుతుక్రమ ఆరోగ్య స్కోర్';
 
   @override
-  String get insightsMhsDelta => 'మునుపటి చక్రంతో పోలిస్తే +6';
+  String get insightsMhsDelta => 'గత చక్రంతో పోలిస్తే +6';
 
   @override
-  String get insightsVar => 'సైకిల్ వేరియబిలిటీ';
+  String get insightsVar => 'చక్ర భిన్నత్వం';
 
   @override
   String get insightsAvgCycle => 'సగటు చక్రం';
@@ -279,7 +279,7 @@ class AppLocalizationsTe extends AppLocalizations {
       'రుతుక్రమం ప్రారంభమయ్యే ముందు ఇనుము అధికంగా ఉండే ఆహారాలను జోడించండి';
 
   @override
-  String get insightsRec2 => 'లూటియల్ దశ రోజులలో 10 నిమిషాల యోగా చేయండి';
+  String get insightsRec2 => 'ల్యూటియల్ దశలో 10 నిమిషాల యోగా చేయండి';
 
   @override
   String get insightsRec3 => 'అండోత్సర్గం వారంలో 2.5L నీరు త్రాగండి';
@@ -291,7 +291,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get profileYearsOld => 'సంవత్సరాలు';
 
   @override
-  String get profileCycleDay => 'సైకిల్ రోజు';
+  String get profileCycleDay => 'చక్ర దినం';
 
   @override
   String get profileQuickStats => 'శీఘ్ర గణాంకాలు';
@@ -303,7 +303,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get profileAvgMentalHealth => 'సగటు మానసిక ఆరోగ్యం';
 
   @override
-  String get profileCycleVariability => 'సైకిల్ వేరియబిలిటీ';
+  String get profileCycleVariability => 'చక్ర భిన్నత్వం';
 
   @override
   String get profileLastCycleLength => 'చివరి చక్రం పొడవు';
@@ -361,22 +361,22 @@ class AppLocalizationsTe extends AppLocalizations {
   String get navHome => 'హోమ్';
 
   @override
-  String get navCycle => 'సైకిల్';
+  String get navCycle => 'చక్రం';
 
   @override
-  String get navAsk => 'ఆస్క్';
+  String get navAsk => 'అడగండి';
 
   @override
   String get navInsights => 'విశ్లేషణలు';
 
   @override
-  String get navYou => 'యూ';
+  String get navYou => 'మీ';
 
   @override
   String get settingsHelpSupport => 'సహాయం మరియు మద్దతు';
 
   @override
-  String get settingsContactUs => 'మమ్మల్ని సంప్రదించండి / బగ్‌ను నివేదించండి';
+  String get settingsContactUs => 'సంప్రదించండి / బగ్ నివేదించండి';
 
   @override
   String get settingsContactDesc => 'మా మద్దతు బృందానికి ఇమెయిల్ పంపండి';
@@ -453,13 +453,13 @@ class AppLocalizationsTe extends AppLocalizations {
   String get onboardingCycleRegularityLabel => 'చక్రం క్రమబద్ధత';
 
   @override
-  String get onboardingRegular => 'క్రమబద్ధం';
+  String get onboardingRegular => 'క్రమంగా';
 
   @override
-  String get onboardingIrregular => 'అక్రమం';
+  String get onboardingIrregular => 'క్రమం తప్పినది';
 
   @override
-  String get onboardingStep4Title => 'కొంచెం ఇంకా (ఐచ్ఛికం)';
+  String get onboardingStep4Title => 'ఇంకొంచెం (ఐచ్ఛికం)';
 
   @override
   String get onboardingStep4Subtitle => 'ప్రాంతీయ ఆరోగ్య చిట్కాల కోసం';
@@ -474,7 +474,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get onboardingStateLabel => 'రాష్ట్రం / పిన్ కోడ్ (ఐచ్ఛికం)';
 
   @override
-  String get onboardingStep5Title => 'అప్‌డేట్‌గా ఉండండి';
+  String get onboardingStep5Title => 'తాజాగా ఉండండి';
 
   @override
   String get onboardingStep5Subtitle =>
