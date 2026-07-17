@@ -68,11 +68,11 @@ export default function Page() {
               <span className="text-[#E94B7B]">of Her Health</span>
             </h1>
             <p className="text-lg text-[#666] leading-relaxed">
-              Rhythma is an AI-powered women's health companion designed specifically for India. Track your menstrual cycle, get personalized insights, and access health guidance in your own language—all with complete privacy.
+              Rhythma is an AI-powered  women&apos;s health companion designed specifically for India. Track your menstrual cycle, get personalized insights, and access health guidance in your own language—all with complete privacy.
             </p>
              <div className="flex flex-wrap gap-4 pt-4">
   <a
-    href="https://rhythma-navy.vercel.app"
+    href=""
     aria-label="Get Started"
     className="bg-[#E94B7B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#D63A6A] hover:scale-105 hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#E94B7B]"
   >
@@ -176,7 +176,7 @@ export default function Page() {
           <div className="space-y-6">
             <h2 className="text-4xl font-bold text-[#2D5B6E]">Powered by AI, Built for India</h2>
             <p className="text-lg text-[#666] leading-relaxed">
-              Rhythma's conversational AI assistant uses Google Gemini to provide multilingual health guidance. Ask your questions in Hindi, Marathi, Tamil, or English—and get clear, compassionate answers.
+              Rhythma&apos;s conversational AI assistant uses Google Gemini to provide multilingual health guidance. Ask your questions in Hindi, Marathi, Tamil, or English—and get clear, compassionate answers.
             </p>
             <ul className="space-y-4">
               {[
@@ -241,10 +241,10 @@ export default function Page() {
             <div>
               <h2 className="text-4xl font-bold mb-6">Why Rhythma?</h2>
               <p className="text-lg leading-relaxed mb-6 text-[#E8DDD5]">
-                For millions of women in India, conversations about menstrual health are surrounded by stigma and misinformation. Existing apps assume English fluency, stable internet, and global healthcare systems that don't reflect Indian reality.
+                For millions of women in India, conversations about menstrual health are surrounded by stigma and misinformation. Existing apps assume English fluency, stable internet, and global healthcare systems that don&apos;t reflect Indian reality.
               </p>
               <p className="text-lg leading-relaxed mb-6 text-[#E8DDD5]">
-                Rhythma was built from the ground up for Indian women. We believe technology can shift the landscape of women's health by enabling earlier awareness, better health literacy, and stigma reduction.
+                Rhythma was built from the ground up for Indian women. We believe technology can shift the landscape of women&apos;s health by enabling earlier awareness, better health literacy, and stigma reduction.
               </p>
               <div className="space-y-3">
                 <p className="flex items-center gap-2">
@@ -297,7 +297,7 @@ export default function Page() {
             </button>
           </form>
           {submitted && (
-            <p className="mt-4 text-white animate-pulse">Thanks for subscribing! We'll be in touch soon. 💕</p>
+            <p className="mt-4 text-white animate-pulse">Thanks for subscribing! We&apos;ll be in touch soon. 💕</p>
           )}
         </div>
       </section>
