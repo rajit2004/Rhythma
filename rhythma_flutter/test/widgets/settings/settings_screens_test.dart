@@ -4,13 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
 import 'package:rhythma/providers/locale_provider.dart';
 import 'package:rhythma/providers/theme_provider.dart';
+import 'package:rhythma/providers/profile_provider.dart'; // <-- added import
 import 'package:rhythma/screens/settings/language_screen.dart';
 import 'package:rhythma/screens/settings/theme_screen.dart';
 import 'package:rhythma/services/local_storage_service.dart';
 
-/// Coverage for the two screens reached from Settings > App Preferences.
-/// Neither LanguageScreen nor ThemeScreen had any widget test before this
-/// change (issue #29, acceptance criterion: "New Settings UI covered").
 void main() {
   setUp(() {
     LocalStorageService.isTesting = true;
@@ -34,6 +32,7 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => localeProvider ?? LocaleProvider()),
           ChangeNotifierProvider(create: (_) => themeProvider ?? ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => ProfileProvider()), // <-- added
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -56,8 +55,6 @@ void main() {
         expect(find.text(langName), findsOneWidget);
       }
 
-      // LocalStorageService.preferredLanguage returns 'en' while isTesting,
-      // so English should carry the selected checkmark and nothing else.
       expect(
         find.descendant(
           of: find.widgetWithText(ListTile, 'English'),
@@ -84,7 +81,6 @@ void main() {
         ),
         findsOneWidget,
       );
-      // Only one language should ever show the checkmark at a time.
       expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
     });
   });
@@ -95,7 +91,7 @@ void main() {
       final themeProvider = ThemeProvider();
       await pumpScreen(tester, const ThemeScreen(), themeProvider: themeProvider);
 
-      expect(find.text('Theme toggle'), findsOneWidget); // AppBar title (l10n.themeToggle)
+      expect(find.text('Theme toggle'), findsOneWidget);
 
       final darkModeSwitch = find.widgetWithText(SwitchListTile, 'Dark Mode');
       expect(tester.widget<SwitchListTile>(darkModeSwitch).value, isFalse);
@@ -116,13 +112,9 @@ void main() {
       expect(find.text('Theme Color'), findsOneWidget);
 
       final rosePink =
-          ThemeScreen.predefinedColors[1]['color'] as Color; // 'Rose Pink'
+          ThemeScreen.predefinedColors[1]['color'] as Color;
       expect(themeProvider.primaryColor, isNot(rosePink));
 
-      // Locate the swatch by its actual fill color rather than its position
-      // in the widget tree, since several other GestureDetectors/InkWells
-      // exist on screen (back button, switch, etc.) and aren't guaranteed
-      // to come after the swatches in hit-test order.
       final swatchFinder = find.byWidgetPredicate((widget) {
         if (widget is! Container) return false;
         final decoration = widget.decoration;

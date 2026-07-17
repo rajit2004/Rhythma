@@ -9,6 +9,7 @@ import '../../providers/locale_provider.dart';
 import '../../providers/theme_provider.dart';
 import 'language_screen.dart';
 import 'theme_screen.dart';
+import '../sms/sms_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -354,6 +355,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           body: 'Native notifications are working perfectly!',
                         );
                       }
+                    },
+                  ),
+                  Divider(height: 1, color: RhythmaColors.border),
+                  ListTile(
+                    leading: TintedIcon(
+                      icon: Icons.sms_rounded,
+                      color: RhythmaColors.teal,
+                      size: 36,
+                    ),
+                    title: const Text('SMS Cycle Summaries'),
+                    subtitle: const Text('Get a text summary sent to your phone'),
+                    trailing: Icon(Icons.chevron_right_rounded, color: RhythmaColors.mutedFg),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SmsScreen()),
+                      );
                     },
                   ),
                 ],
