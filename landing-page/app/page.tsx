@@ -35,9 +35,24 @@ export default function Page() {
               <span className="font-bold text-xl text-[#2D5B6E]">Rhythma</span>
             </div>
             <div className="hidden md:flex gap-8">
-              <a href="#features" className="text-[#5A5A5A] hover:text-[#E94B7B] transition">Features</a>
-              <a href="#about" className="text-[#5A5A5A] hover:text-[#E94B7B] transition">About</a>
-              <a href="#contact" className="text-[#5A5A5A] hover:text-[#E94B7B] transition">Contact</a>
+              <a
+  href="#features"
+  className="text-[#5A5A5A] hover:text-[#E94B7B] transition focus:outline-none focus:ring-2 focus:ring-[#E94B7B] rounded"
+>
+  Features
+</a>
+              <a
+  href="#about"
+  className="text-[#5A5A5A] hover:text-[#E94B7B] transition focus:outline-none focus:ring-2 focus:ring-[#E94B7B] rounded"
+>
+  About
+</a>
+              <a
+  href="#contact"
+  className="text-[#5A5A5A] hover:text-[#E94B7B] transition focus:outline-none focus:ring-2 focus:ring-[#E94B7B] rounded"
+>
+  Contact
+</a>
             </div>
           </div>
         </div>
@@ -55,14 +70,23 @@ export default function Page() {
             <p className="text-lg text-[#666] leading-relaxed">
               Rhythma is an AI-powered women's health companion designed specifically for India. Track your menstrual cycle, get personalized insights, and access health guidance in your own language—all with complete privacy.
             </p>
-            <div className="flex gap-4 pt-4">
-              <button className="bg-[#E94B7B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#D63A6A] hover:scale-105 hover:shadow-lg transition-all duration-200 cursor-pointer">
-                Get Started
-              </button>
-              <button className="border-2 border-[#E94B7B] text-[#E94B7B] px-8 py-3 rounded-full font-semibold hover:bg-[#FFE8F0] hover:scale-105 hover:shadow-md transition-all duration-200 cursor-pointer">
-                Learn More
-              </button>
-            </div>
+             <div className="flex flex-wrap gap-4 pt-4">
+  <a
+    href="https://rhythma-navy.vercel.app"
+    aria-label="Get Started"
+    className="bg-[#E94B7B] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#D63A6A] hover:scale-105 hover:shadow-lg transition-all duration-200 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#E94B7B]"
+  >
+    Get Started
+  </a>
+
+  <a
+    href="#features"
+    aria-label="Learn More"
+    className="border-2 border-[#E94B7B] text-[#E94B7B] px-8 py-3 rounded-full font-semibold hover:bg-[#FFE8F0] hover:scale-105 hover:shadow-md transition-all duration-200 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-[#E94B7B]"
+  >
+    Learn More
+  </a>
+</div>
             <div className="flex flex-wrap gap-6 pt-8">
               <a href="https://www.linkedin.com/company/130984014" target="_blank" rel="noopener noreferrer" className="text-[#666] hover:text-[#E94B7B] transition text-sm font-medium">
                 LinkedIn
@@ -289,25 +313,71 @@ export default function Page() {
             <div>
               <h4 className="font-bold mb-4">Product</h4>
               <ul className="space-y-2 text-[#B0D4E3]">
-                <li><a href="#features" className="hover:text-white transition">Features</a></li>
-                <li><a href="#about" className="hover:text-white transition">About</a></li>
-                <li><a href="https://medium.com/@rathiishita1005729/building-rhythma-an-ai-health-companion-for-the-women-indias-forgot-e249ac1cdc9a" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Blog</a></li>
+                <li><a
+  href="#features"
+  className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded">Features</a></li>
+                <li><a
+  href="#about"
+  className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+>About</a></li>
+               <li>
+  <a
+    href="https://medium.com/@rathiishita1005729/building-rhythma-an-ai-health-companion-for-the-women-indias-forgot-e249ac1cdc9a"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+  >
+    Blog
+  </a>
+</li> 
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Connect</h4>
               <ul className="space-y-2 text-[#B0D4E3]">
-                <li><a href="https://x.com/rhythmaAI" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Twitter</a></li>
-                <li><a href="https://www.linkedin.com/company/130984014" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">LinkedIn</a></li>
-                <li><a href="https://www.instagram.com/rhythma.ai/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Instagram</a></li>
+                <li>
+  <a
+    href="https://x.com/rhythmaAI"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+  >
+    Twitter
+  </a>
+</li>
+
+<li>
+  <a
+    href="https://www.linkedin.com/company/130984014"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+  >
+    LinkedIn
+  </a>
+</li>
+
+<li>
+  <a
+    href="https://www.instagram.com/rhythma.ai/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+  >
+    Instagram
+  </a>
+</li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Contact</h4>
               <p className="text-[#B0D4E3]">
-                <a href="mailto:rhythma.official@gmail.com" className="hover:text-white transition">
-                  rhythma.official@gmail.com
-                </a>
+                <a
+  href="mailto:rhythma.official@gmail.com"
+  className="hover:text-white transition focus:outline-none focus:ring-2 focus:ring-white rounded"
+>
+  rhythma.official@gmail.com
+</a>
               </p>
             </div>
           </div>
