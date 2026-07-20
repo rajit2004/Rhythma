@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:rhythma/l10n/app_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'components/bottom_nav.dart';
 import 'components/shared.dart';
@@ -12,6 +14,7 @@ import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/cycle_provider.dart';
 import 'providers/profile_provider.dart';
+import 'providers/sync_status_provider.dart';
 
 import 'screens/assistant/assistant_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -24,6 +27,7 @@ import 'screens/profile/profile_screen.dart';
 
 import 'services/api_client.dart';
 import 'services/auth_service.dart';
+import 'services/firestore_service.dart';
 import 'services/local_storage_service.dart';
 import 'services/notification_service.dart';
 
@@ -32,8 +36,12 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await LocalStorageService.init();
   await NotificationService.instance.init();
+  await FirestoreService.init();
 
   ApiClient.init(onUnauthorized: () {
     final navigator = rootNavigatorKey.currentState;
@@ -55,6 +63,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CycleProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => SyncStatusProvider()),
       ],
       child: const RhythmaApp(),
     ),
