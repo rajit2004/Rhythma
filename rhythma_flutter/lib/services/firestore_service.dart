@@ -21,6 +21,25 @@ class FirestoreService {
   static bool _initialized = false;
   static bool _isSyncing = false;
 
+  /// Safe wrappers: only call SyncStatusProvider if the provider exists.
+  static void _updateStatus(SyncStatus status, String type, {String? error}) {
+    if (SyncStatusProvider.hasInstance) {
+      _updateStatus(status, type, error: error);
+    }
+  }
+
+  static void _setOnline() {
+    if (SyncStatusProvider.hasInstance) {
+      _setOnline();
+    }
+  }
+
+  static void _setOffline() {
+    if (SyncStatusProvider.hasInstance) {
+      _setOffline();
+    }
+  }
+
   // ────────────────────────────────────────────────────────────────────────────
   // INITIALIZATION
   // ────────────────────────────────────────────────────────────────────────────
@@ -52,7 +71,7 @@ class FirestoreService {
     final isOnline = results.any((r) => r != ConnectivityResult.none);
     
     if (isOnline) {
-      SyncStatusProvider.instance.setOnline();
+      _setOnline();
       // Trigger sync for current user
       final uid = LocalStorageService.currentUserId;
       if (uid != null && LocalStorageService.cloudSyncEnabled) {
@@ -61,7 +80,7 @@ class FirestoreService {
         syncProfile(userId: uid);
       }
     } else {
-      SyncStatusProvider.instance.setOffline();
+      _setOffline();
     }
   }
 
@@ -73,7 +92,7 @@ class FirestoreService {
   static Future<void> syncCycleLogs({required String userId}) async {
     if (!LocalStorageService.cloudSyncEnabled) {
       debugPrint('FirestoreService: cloud sync disabled, skipping cycle sync');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'cycle');
+      _updateStatus(SyncStatus.synced, 'cycle');
       return;
     }
     if (_db == null || _isSyncing) return;
@@ -81,16 +100,16 @@ class FirestoreService {
     final logs = LocalStorageService.getCycleLogs();
     if (logs.isEmpty) {
       debugPrint('FirestoreService: no local cycle logs to sync');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'cycle');
+      _updateStatus(SyncStatus.synced, 'cycle');
       return;
     }
 
     _isSyncing = true;
-    SyncStatusProvider.instance.updateStatus(SyncStatus.syncing, 'cycle');
+    _updateStatus(SyncStatus.syncing, 'cycle');
 
     try {
       final batch = _db!.batch();
-      final userRef = _db!.collection('users').doc(userId);
+      final userRef = _db!.collection('client_sync').doc(userId);
 
       for (final log in logs) {
         final docRef = userRef.collection('cycle_logs').doc(log['start_date'] as String);
@@ -103,10 +122,22 @@ class FirestoreService {
 
       await batch.commit();
       debugPrint('FirestoreService: synced ${logs.length} cycle logs for $userId');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'cycle');
+
+      // Read back resolved server timestamps and update Hive
+      for (final log in logs) {
+        final docRef = userRef.collection('cycle_logs').doc(log['start_date'] as String);
+        final doc = await docRef.get();
+        if (doc.exists) {
+          final resolvedData = doc.data()!;
+          resolvedData['start_date'] = log['start_date'];
+          await LocalStorageService.saveCycleLog(resolvedData);
+        }
+      }
+
+      _updateStatus(SyncStatus.synced, 'cycle');
     } catch (e) {
       debugPrint('FirestoreService: cycle sync failed: $e');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.error, 'cycle', error: e.toString());
+      _updateStatus(SyncStatus.error, 'cycle', error: e.toString());
       // Queue for retry
       await _queuePendingCycleLogs(userId, logs);
     } finally {
@@ -120,7 +151,7 @@ class FirestoreService {
     if (_db == null) return;
 
     try {
-      final snapshot = await _db!.collection('users')
+      final snapshot = await _db!.collection('client_sync')
           .doc(userId)
           .collection('cycle_logs')
           .orderBy('start_date', descending: true)
@@ -142,10 +173,10 @@ class FirestoreService {
         }
       }
       debugPrint('FirestoreService: pulled ${snapshot.docs.length} cycle logs for $userId');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'cycle');
+      _updateStatus(SyncStatus.synced, 'cycle');
     } catch (e) {
       debugPrint('FirestoreService: pull cycle logs failed: $e');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.error, 'cycle', error: e.toString());
+      _updateStatus(SyncStatus.error, 'cycle', error: e.toString());
     }
   }
 
@@ -160,7 +191,7 @@ class FirestoreService {
         'queued_at': DateTime.now().toIso8601String()
       });
     }
-    SyncStatusProvider.instance.updateStatus(SyncStatus.pending, 'cycle');
+    _updateStatus(SyncStatus.pending, 'cycle');
   }
 
   /// Flush pending cycle logs queue to Firestore
@@ -177,11 +208,11 @@ class FirestoreService {
     if (keys.isEmpty) return;
 
     debugPrint('FirestoreService: flushing ${keys.length} pending cycle logs for $userId');
-    SyncStatusProvider.instance.updateStatus(SyncStatus.syncing, 'cycle');
+    _updateStatus(SyncStatus.syncing, 'cycle');
 
     try {
       final batch = _db!.batch();
-      final userRef = _db!.collection('users').doc(userId);
+      final userRef = _db!.collection('client_sync').doc(userId);
 
       for (final key in keys) {
         final log = pendingBox.get(key)!;
@@ -202,10 +233,10 @@ class FirestoreService {
       }
       
       debugPrint('FirestoreService: flushed ${keys.length} pending cycle logs for $userId');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'cycle');
+      _updateStatus(SyncStatus.synced, 'cycle');
     } catch (e) {
       debugPrint('FirestoreService: flush pending queue failed: $e');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.error, 'cycle', error: e.toString());
+      _updateStatus(SyncStatus.error, 'cycle', error: e.toString());
     }
   }
 
@@ -221,20 +252,29 @@ class FirestoreService {
     final profile = LocalStorageService.getProfile();
     if (profile == null) return;
 
-    SyncStatusProvider.instance.updateStatus(SyncStatus.syncing, 'profile');
+    _updateStatus(SyncStatus.syncing, 'profile');
 
     try {
-      final userRef = _db!.collection('users').doc(userId);
+      final userRef = _db!.collection('client_sync').doc(userId);
       final data = Map<String, dynamic>.from(profile);
       data['synced_at'] = FieldValue.serverTimestamp();
       data['device_id'] = LocalStorageService.currentUserId;
       
       await userRef.set(data, SetOptions(merge: true));
       debugPrint('FirestoreService: synced profile for $userId');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'profile');
+
+      // Read back resolved server timestamp and update Hive
+      final resolvedDoc = await userRef.get();
+      if (resolvedDoc.exists) {
+        final resolved = resolvedDoc.data()!;
+        final merged = {...profile, ...resolved};
+        await LocalStorageService.saveProfile(merged);
+      }
+
+      _updateStatus(SyncStatus.synced, 'profile');
     } catch (e) {
       debugPrint('FirestoreService: profile sync failed: $e');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.error, 'profile', error: e.toString());
+      _updateStatus(SyncStatus.error, 'profile', error: e.toString());
     }
   }
 
@@ -244,7 +284,7 @@ class FirestoreService {
     if (_db == null) return;
 
     try {
-      final doc = await _db!.collection('users').doc(userId).get();
+      final doc = await _db!.collection('client_sync').doc(userId).get();
       if (!doc.exists) return;
 
       final data = doc.data()!;
@@ -261,10 +301,10 @@ class FirestoreService {
       }
       
       debugPrint('FirestoreService: pulled profile for $userId');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.synced, 'profile');
+      _updateStatus(SyncStatus.synced, 'profile');
     } catch (e) {
       debugPrint('FirestoreService: pull profile failed: $e');
-      SyncStatusProvider.instance.updateStatus(SyncStatus.error, 'profile', error: e.toString());
+      _updateStatus(SyncStatus.error, 'profile', error: e.toString());
     }
   }
 
@@ -274,7 +314,7 @@ class FirestoreService {
 
   /// Stream of cycle logs from Firestore for real-time updates
   static Stream<QuerySnapshot<Map<String, dynamic>>> cycleLogsStream(String userId) {
-    return _db!.collection('users')
+    return _db!.collection('client_sync')
         .doc(userId)
         .collection('cycle_logs')
         .orderBy('start_date', descending: true)
@@ -284,7 +324,7 @@ class FirestoreService {
 
   /// Stream of profile from Firestore
   static Stream<DocumentSnapshot<Map<String, dynamic>>> profileStream(String userId) {
-    return _db!.collection('users').doc(userId).snapshots();
+    return _db!.collection('client_sync').doc(userId).snapshots();
   }
 
   // ────────────────────────────────────────────────────────────────────────────

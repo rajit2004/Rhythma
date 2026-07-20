@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/firestore_service.dart';
 
 /// Sync status for Issue #20 - Sync Status Indicator
 enum SyncStatus {
@@ -14,6 +13,7 @@ enum SyncStatus {
 class SyncStatusProvider extends ChangeNotifier {
   static SyncStatusProvider? _instance;
   static SyncStatusProvider get instance => _instance!;
+  static bool get hasInstance => _instance != null;
 
   SyncStatusProvider() {
     _instance = this;
