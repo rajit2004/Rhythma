@@ -202,7 +202,7 @@ class InsightsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: RhythmaColors.teal.withOpacity(0.14),
+                        color: RhythmaColors.teal.withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

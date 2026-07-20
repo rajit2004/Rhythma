@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Icon(
                     Icons.auto_awesome_rounded,
                     size: 80,
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                   ),
                 ),
                 Column(
@@ -284,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             letterSpacing: 1,
                           ),
                         ),
@@ -313,20 +313,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 14, vertical: 10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
                                 children: [
                                   Icon(Icons.chat_bubble_outline_rounded,
                                       size: 15,
-                                      color: Colors.white.withOpacity(0.9)),
+                                      color: Colors.white.withValues(alpha: 0.9)),
                                   const SizedBox(width: 8),
                                   Text(
                                     l10n.homeAiPrompt,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: Colors.white.withOpacity(0.9),
+                                      color: Colors.white.withValues(alpha: 0.9),
                                     ),
                                   ),
                                 ],
@@ -339,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.25),
+                            color: Colors.white.withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: const Icon(Icons.mic_rounded,
@@ -604,7 +604,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 34,
                     height: 34,
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.15),
+                      color: color.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(icon, color: color, size: 17),
@@ -750,7 +750,7 @@ class _LogButton extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
+                color: color.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: color, size: 20),
@@ -799,8 +799,8 @@ class _LearnCard extends StatelessWidget {
                     Color.lerp(color, RhythmaColors.primary, 0.5)!
                   ],
                 ),
-          color: isDark ? color.withOpacity(0.15) : null,
-          border: isDark ? Border.all(color: color.withOpacity(0.3)) : null,
+          color: isDark ? color.withValues(alpha: 0.15) : null,
+          border: isDark ? Border.all(color: color.withValues(alpha: 0.3)) : null,
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.all(16),
@@ -813,7 +813,7 @@ class _LearnCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 9,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withOpacity(0.75),
+                  color: Colors.white.withValues(alpha: 0.75),
                   letterSpacing: 1),
             ),
             const SizedBox(height: 4),

@@ -199,7 +199,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: RhythmaColors.primary.withOpacity(0.1),
+                    color: RhythmaColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(lang.toUpperCase(),
@@ -259,9 +259,9 @@ class _AssistantScreenState extends State<AssistantScreen> {
               borderRadius: BorderRadius.circular(28),
               child: Container(
                 decoration: BoxDecoration(
-                  color: RhythmaColors.surface.withOpacity(0.85),
+                  color: RhythmaColors.surface.withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: RhythmaColors.lavender.withOpacity(0.5)),
+                  border: Border.all(color: RhythmaColors.lavender.withValues(alpha: 0.5)),
                 ),
                 child: Row(
                   children: [
@@ -286,7 +286,7 @@ class _AssistantScreenState extends State<AssistantScreen> {
                           width: 40, height: 40,
                           decoration: BoxDecoration(
                             gradient: _isLoading ? null : RhythmaGradients.primary,
-                            color: _isLoading ? RhythmaColors.mutedFg.withOpacity(0.25) : null,
+                            color: _isLoading ? RhythmaColors.mutedFg.withValues(alpha: 0.25) : null,
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
@@ -347,8 +347,8 @@ class _ChatBubble extends StatelessWidget {
                 color: isUser
                     ? null
                     : msg.isError
-                        ? Colors.red.withOpacity(0.08)
-                        : RhythmaColors.surface.withOpacity(0.85),
+                        ? Colors.red.withValues(alpha: 0.08)
+                        : RhythmaColors.surface.withValues(alpha: 0.85),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(18),
                   topRight: const Radius.circular(18),
@@ -359,8 +359,8 @@ class _ChatBubble extends StatelessWidget {
                     ? null
                     : Border.all(
                         color: msg.isError
-                            ? Colors.red.withOpacity(0.3)
-                            : RhythmaColors.lavender.withOpacity(0.4),
+                            ? Colors.red.withValues(alpha: 0.3)
+                            : RhythmaColors.lavender.withValues(alpha: 0.4),
                       ),
               ),
               child: isUser
@@ -461,12 +461,12 @@ class _TypingBubble extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: RhythmaColors.surface.withOpacity(0.85),
+            color: RhythmaColors.surface.withValues(alpha: 0.85),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(18), topRight: Radius.circular(18),
               bottomRight: Radius.circular(18), bottomLeft: Radius.circular(4),
             ),
-            border: Border.all(color: RhythmaColors.lavender.withOpacity(0.4)),
+            border: Border.all(color: RhythmaColors.lavender.withValues(alpha: 0.4)),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             _dot(0), const SizedBox(width: 4),

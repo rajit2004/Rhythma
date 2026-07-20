@@ -118,16 +118,16 @@ class GradientBox extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: colors ??
-                    [RhythmaColors.primary, RhythmaColors.primary.withOpacity(0.6)],
+                    [RhythmaColors.primary, RhythmaColors.primary.withValues(alpha: 0.6)],
               ),
-        color: isDark ? primaryColor.withOpacity(0.15) : null,
-        border: isDark ? Border.all(color: primaryColor.withOpacity(0.3)) : null,
+        color: isDark ? primaryColor.withValues(alpha: 0.15) : null,
+        border: isDark ? Border.all(color: primaryColor.withValues(alpha: 0.3)) : null,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: isDark
             ? null
             : [
                 BoxShadow(
-                  color: primaryColor.withOpacity(0.28),
+                  color: primaryColor.withValues(alpha: 0.28),
                   blurRadius: 40,
                   offset: const Offset(0, 10),
                 ),

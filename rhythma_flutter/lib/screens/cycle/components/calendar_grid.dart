@@ -109,7 +109,7 @@ class _CalendarGridState extends State<CalendarGrid> {
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? phaseColor
-                                : phaseColor.withOpacity(0.14),
+                                : phaseColor.withValues(alpha: 0.14),
                             borderRadius: BorderRadius.circular(10),
                             border: isToday && !isSelected
                                 ? Border.all(color: phaseColor, width: 1.4)

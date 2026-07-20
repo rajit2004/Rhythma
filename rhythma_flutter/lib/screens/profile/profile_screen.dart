@@ -170,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: isSelected
-                                ? RhythmaColors.primary.withOpacity(0.2)
+                                ? RhythmaColors.primary.withValues(alpha: 0.2)
                                 : RhythmaColors.surface,
                             border: Border.all(
                               color: isSelected ? RhythmaColors.primary : Colors.transparent,
