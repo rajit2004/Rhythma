@@ -65,3 +65,12 @@ User (WhatsApp) ──► Twilio / Meta Cloud API ──► FastAPI webhook
                                                       │
                                               Response back to user
 ```
+### Frontend Coexistence & Strategy (`web/` vs `rhythma_flutter/`)
+
+The repository currently contains two frontend implementations:
+
+* **`rhythma_flutter/` (Primary):** The primary cross-platform codebase targeting Android, iOS, and Web. **All new features and user-facing capabilities should be built here.**
+* **`web/` (Legacy Scaffold):** A minimal, React-based authentication scaffold (`web/src/pages/HomePage.tsx`) built early in the project to test backend API integration.
+
+> **Target Frontend Policy:**
+> `web/` is currently maintained solely as a simple auth scaffold and is planned to be superseded by the official **Flutter Web** build (tracked in [#68](https://github.com/ishita2740/Rhythma/issues/68) / [#142](https://github.com/ishita2740/Rhythma/issues/142)). **Do not add new application features or pages to `web/`.** All new feature development must be directed to `rhythma_flutter/`.
