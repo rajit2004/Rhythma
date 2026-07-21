@@ -24,19 +24,19 @@ class FirestoreService {
   /// Safe wrappers: only call SyncStatusProvider if the provider exists.
   static void _updateStatus(SyncStatus status, String type, {String? error}) {
     if (SyncStatusProvider.hasInstance) {
-      _updateStatus(status, type, error: error);
+      SyncStatusProvider.instance.updateStatus(status, type, error: error);
     }
   }
 
   static void _setOnline() {
     if (SyncStatusProvider.hasInstance) {
-      _setOnline();
+      SyncStatusProvider.instance.setOnline();
     }
   }
 
   static void _setOffline() {
     if (SyncStatusProvider.hasInstance) {
-      _setOffline();
+      SyncStatusProvider.instance.setOffline();
     }
   }
 
