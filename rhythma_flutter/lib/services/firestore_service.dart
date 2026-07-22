@@ -222,8 +222,9 @@ class FirestoreService {
 
     debugPrint('FirestoreService: flushing ${keys.length} pending items for $userId');
 
-    // Process cycle log entries
-    final cycleKeys = keys.where((k) => k.startsWith('cycle::')).toList();
+    // Process cycle log entries (new keys start with 'cycle::',
+    // old keys from before generalization have no prefix)
+    final cycleKeys = keys.where((k) => !k.startsWith('profile::')).toList();
     if (cycleKeys.isNotEmpty) {
       _updateStatus(SyncStatus.syncing, 'cycle');
       try {
